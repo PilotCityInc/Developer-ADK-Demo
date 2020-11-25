@@ -21,7 +21,6 @@
         @click="currentPage = 'preview'"
         >Preview</v-btn
       >
-
       <v-btn
         v-if="currentPage == 'preview'"
         class="module__navbar-button"
@@ -383,7 +382,7 @@ export default {
 
   setup() {
     // ENTER ACTIVITY NAME BELOW
-    const moduleName = ref('Prototype Demonstration');
+    const moduleName = ref('Demonstration');
     const page = reactive({
       subpages: ['Setup', 'Presets', 'Monitor'],
       currentPage: 'Setup'
