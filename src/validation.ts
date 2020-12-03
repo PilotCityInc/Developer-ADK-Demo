@@ -1,5 +1,5 @@
 import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
-import { required, email, min, regex } from 'vee-validate/dist/rules';
+import { required, email, min, regex, numeric } from 'vee-validate/dist/rules';
 
 extend('required', {
   ...required,
@@ -27,5 +27,11 @@ extend('regex', {
   ...regex,
 
   message: 'Must be a Valid URL'
+});
+
+extend('numeric', {
+  ...numeric,
+
+  message: 'Must be a numeric value'
 });
 export { ValidationObserver, ValidationProvider };
