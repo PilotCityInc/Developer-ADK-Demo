@@ -1,111 +1,131 @@
 <template>
-  <v-container class="module-default__container">
-    <div class="module-default__instructions">
-      <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
-        <v-expansion-panel>
-          <v-expansion-panel-header
-            v-show="showInstructions"
-            hide-actions
-            class="pa-0"
-            @click="showInstructions = true"
-          >
-            <template v-slot="{ open }">
-              <v-scroll-y-transition hide-on-leave>
-                <div v-if="!open" class="d-flex flex-column justify-center">
-                  <v-icon color="grey lighten-2" class="d-flex justify-center">
-                    mdi-chevron-down
-                  </v-icon>
-                  <div color="grey lighten-2" class="module-default__collapse-title">
-                    INSTRUCTIONS
+  <ValidationObserver v-slot="{ invalid }" slim>
+    <v-container class="module-default__container">
+      <div class="module-default__instructions">
+        <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
+          <v-expansion-panel>
+            <v-expansion-panel-header
+              v-show="showInstructions"
+              hide-actions
+              class="pa-0"
+              @click="showInstructions = true"
+            >
+              <template v-slot="{ open }">
+                <v-scroll-y-transition hide-on-leave>
+                  <div v-if="!open" class="d-flex flex-column justify-center">
+                    <v-icon color="grey lighten-2" class="d-flex justify-center">
+                      mdi-chevron-down
+                    </v-icon>
+                    <div color="grey lighten-2" class="module-default__collapse-title">
+                      INSTRUCTIONS
+                    </div>
                   </div>
-                </div>
-              </v-scroll-y-transition>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <Instruct readonly />
-            <div @click="showInstructions = true">
-              <div class="module-default__collapse-title">CLOSE</div>
-              <!-- <div class="hr"/> OPTIONAL -->
-              <v-icon color="grey lighten-2" class="d-flex justify-center"> mdi-chevron-up </v-icon>
-            </div>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </div>
-    <v-progress-linear
-      class="module-default__collapse-divider"
-      color="#dedede"
-      height="2"
-      value="100"
-      buffer-value="100"
-      stream
-    />
-    <div class="module-edit__container">
-      <div class="module-default__row">
-        <v-text-field
-          label="Prototype Demonstration Video"
-          outlined
-          placeholder="Enter YouTube video link"
-          prepend-inner-icon="mdi-youtube"
-        ></v-text-field
-        ><v-btn class="module-default__youtube-verify-button ml-3" x-large outlined depressed
-          >Verify Link</v-btn
-        >
+                </v-scroll-y-transition>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <Instruct readonly />
+              <div @click="showInstructions = true">
+                <div class="module-default__collapse-title">CLOSE</div>
+                <!-- <div class="hr"/> OPTIONAL -->
+                <v-icon color="grey lighten-2" class="d-flex justify-center">
+                  mdi-chevron-up
+                </v-icon>
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </div>
-      <v-chip-group column multiple class="module-default__youtube-data mb-8">
-        <v-chip class="mr-2" dark small label color="green">
-          <v-icon small left>mdi-check-bold</v-icon>
-          Verified YouTube Video
-        </v-chip>
-        <v-chip color="red" dark class="mr-2" small label>
-          <v-icon small left>mdi-close-thick</v-icon>
-          Replace with YouTube Video
-        </v-chip>
-        <v-chip class="mr-2" dark small label color="green">
-          <v-icon small left>mdi-check-bold</v-icon>
-          Verified Video Length
-        </v-chip>
-        <v-chip color="red" dark class="mr-2" small label>
-          <v-icon small left>mdi-close-thick</v-icon>
-          Video Length Exceeds Maximum
-        </v-chip>
+      <v-progress-linear
+        class="module-default__collapse-divider"
+        color="#dedede"
+        height="2"
+        value="100"
+        buffer-value="100"
+        stream
+      />
+      <div class="module-edit__container">
+        <div class="module-default__row">
+          <validation-provider
+            v-slot="{ errors }"
+            slim
+            :rules="{
+              regex: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+            }"
+          >
+            <v-text-field
+              v-model="link"
+              label="Prototype Demonstration Video"
+              :error-messages="errors"
+              outlined
+              placeholder="Enter YouTube video link"
+              prepend-inner-icon="mdi-youtube"
+            ></v-text-field>
+          </validation-provider>
 
-        <v-chip class="mr-2" dark small label color="green">
-          <v-icon small left>mdi-check-bold</v-icon>
-          Video is Public or Unlisted
-        </v-chip>
-        <v-chip color="red" dark class="mr-2" small label>
-          <v-icon small left>mdi-close-thick</v-icon>
-          Make Video Public or Unlisted
-        </v-chip>
-      </v-chip-group>
-      <div>
-        <v-btn outlined color="grey darken-1" class="mb-6" depressed x-small label>
-          <!-- <v-icon left>mdi-check</v-icon> -->
-          Team Yeezy Prototype Demonstration Video
-          <v-icon x-small right>mdi-open-in-new</v-icon>
-        </v-btn>
-      </div>
-      <!-- <div class="module-default__youtube"></div> -->
-      <iframe
-        class="module-default__youtube"
-        :src="`https://www.youtube.com/embed/df0ZmKkzuWY`"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-      <!-- <v-text-field
+          <v-btn
+            class="module-default__youtube-verify-button ml-3"
+            x-large
+            outlined
+            depressed
+            :disabled="invalid"
+            >Verify Link</v-btn
+          >
+        </div>
+        <v-chip-group column multiple class="module-default__youtube-data mb-8">
+          <v-chip class="mr-2" dark small label color="green">
+            <v-icon small left>mdi-check-bold</v-icon>
+            Verified YouTube Video
+          </v-chip>
+          <v-chip color="red" dark class="mr-2" small label>
+            <v-icon small left>mdi-close-thick</v-icon>
+            Replace with YouTube Video
+          </v-chip>
+          <v-chip class="mr-2" dark small label color="green">
+            <v-icon small left>mdi-check-bold</v-icon>
+            Verified Video Length
+          </v-chip>
+          <v-chip color="red" dark class="mr-2" small label>
+            <v-icon small left>mdi-close-thick</v-icon>
+            Video Length Exceeds Maximum
+          </v-chip>
+
+          <v-chip class="mr-2" dark small label color="green">
+            <v-icon small left>mdi-check-bold</v-icon>
+            Video is Public or Unlisted
+          </v-chip>
+          <v-chip color="red" dark class="mr-2" small label>
+            <v-icon small left>mdi-close-thick</v-icon>
+            Make Video Public or Unlisted
+          </v-chip>
+        </v-chip-group>
+        <div>
+          <v-btn outlined color="grey darken-1" class="mb-6" depressed x-small label>
+            <!-- <v-icon left>mdi-check</v-icon> -->
+            Team Yeezy Prototype Demonstration Video
+            <v-icon x-small right>mdi-open-in-new</v-icon>
+          </v-btn>
+        </div>
+        <!-- <div class="module-default__youtube"></div> -->
+        <iframe
+          class="module-default__youtube"
+          :src="`https://www.youtube.com/embed/df0ZmKkzuWY`"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+        <!-- <v-text-field
         disabled
         placeholder="3:25"
         outlined
         append-icon="mdi-close-circle"
       ></v-text-field> -->
-      <!-- ENTER CONTENT HERE -->
-      <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
-      <!-- <div class="module-default__none">Design your activity here</div> -->
-    </div>
-  </v-container>
+        <!-- ENTER CONTENT HERE -->
+        <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
+        <!-- <div class="module-default__none">Design your activity here</div> -->
+      </div>
+    </v-container>
+  </ValidationObserver>
 </template>
 
 <script lang="ts">
@@ -118,7 +138,9 @@ export default {
     Instruct
   },
   apollo: {},
-  data() {
+  setup() {
+    const link = ref('');
+
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
@@ -126,7 +148,8 @@ export default {
     const showInstructions = ref(true);
     return {
       setupInstructions,
-      showInstructions
+      showInstructions,
+      link
     };
   }
 };
