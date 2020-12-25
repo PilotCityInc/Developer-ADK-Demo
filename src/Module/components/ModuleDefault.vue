@@ -50,7 +50,8 @@
             v-slot="{ errors }"
             slim
             :rules="{
-              regex: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+              regex: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+              required: true
             }"
           >
             <v-text-field
@@ -72,7 +73,7 @@
             >Verify Link</v-btn
           >
         </div>
-        <v-chip-group column multiple class="module-default__youtube-data mb-8">
+        <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
           <v-chip class="mr-2" dark small label color="green">
             <v-icon small left>mdi-check-bold</v-icon>
             Verified YouTube Video
@@ -98,7 +99,7 @@
             <v-icon small left>mdi-close-thick</v-icon>
             Make Video Public or Unlisted
           </v-chip>
-        </v-chip-group>
+        </v-chip-group> -->
         <div>
           <v-btn outlined color="grey darken-1" class="mb-6" depressed x-small label>
             <!-- <v-icon left>mdi-check</v-icon> -->
@@ -109,7 +110,7 @@
         <!-- <div class="module-default__youtube"></div> -->
         <iframe
           class="module-default__youtube"
-          :src="`https://www.youtube.com/embed/df0ZmKkzuWY`"
+          :src="link"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
