@@ -15,5 +15,15 @@ const endEarly = [
   'Yes',
   'No'
 ];
+const maxMinutes = ['2', '3', '5'];
 
-export { group, required, lockOrder, deliverable, notifications, accessibility, endEarly };
+export {
+  group,
+  required,
+  lockOrder,
+  deliverable,
+  notifications,
+  accessibility,
+  endEarly,
+  maxMinutes
+};
