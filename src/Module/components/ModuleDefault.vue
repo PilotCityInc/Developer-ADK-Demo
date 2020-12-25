@@ -70,6 +70,7 @@
             outlined
             depressed
             :disabled="invalid"
+            @click="save()"
             >Verify Link</v-btn
           >
         </div>
@@ -110,7 +111,7 @@
         <!-- <div class="module-default__youtube"></div> -->
         <iframe
           class="module-default__youtube"
-          :src="link"
+          :src="link2"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -141,16 +142,24 @@ export default {
   apollo: {},
   setup() {
     const link = ref('');
-
+    const link2 = ref('');
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
     });
     const showInstructions = ref(true);
+    function save() {
+      link2.value = link.value;
+      console.log(link2);
+    }
+    console.log(link2);
+
     return {
       setupInstructions,
       showInstructions,
-      link
+      link,
+      save,
+      link2
     };
   }
 };
