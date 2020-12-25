@@ -6,12 +6,13 @@
         <div class="presets__section-title">General</div>
         <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span>
         <validation-provider v-slot="{ errors }" slim rules="numeric">
-          <v-text-field
+          <v-select
             v-model="minutes"
             outlined
+            :items="maxMinutes"
             :error-messages="errors"
             label="Maximum minutes"
-          ></v-text-field>
+          ></v-select>
         </validation-provider>
         <!-- <div class="presets__nopresets">No tweaking necessary</div> -->
         <v-divider class="presets__divider"></v-divider>
@@ -25,6 +26,7 @@
             v-model="groupActivity"
             :error-messages="errors"
             :items="group"
+            disabled
             label="What activity group does this belong to?"
             outlined
           ></v-select>
@@ -34,6 +36,7 @@
             v-model="requiredActivity"
             :error-messages="errors"
             :items="required"
+            disabled
             label="Is this activity required for participants to complete?"
             outlined
           ></v-select>
@@ -49,6 +52,7 @@
             v-model="deliverableActivity"
             :error-messages="errors"
             :items="deliverable"
+            disabled
             label="Is this a deliverable?"
             outlined
           ></v-select>
@@ -63,6 +67,7 @@
             v-model="endEarlyActivity"
             :error-messages="errors"
             :items="endEarly"
+            disabled
             label="Allow participants to end program early after completion of this activity?"
             outlined
           ></v-select>
@@ -100,15 +105,7 @@
 <script lang="ts">
 import { reactive, ref, toRefs } from '@vue/composition-api';
 import Instruct from './ModuleInstruct.vue';
-import {
-  group,
-  required,
-  lockOrder,
-  deliverable,
-  notifications,
-  accessibility,
-  endEarly
-} from './const';
+import { group, required, deliverable, endEarly, maxMinutes } from './const';
 // import gql from 'graphql-tag';
 
 export default {
@@ -119,23 +116,18 @@ export default {
   apollo: {},
   setup() {
     const presets = reactive({
+      maxMinutes,
       group,
       required,
-      lockOrder,
       deliverable,
-      notifications,
-      accessibility,
       endEarly
     });
     const defaultActivity = reactive({
-      minutes: '',
-      groupActivity: '',
-      requiredActivity: '',
-      lockOrderActivity: '',
-      deliverableActivity: '',
-      notificationsActivity: '',
-      accessibilityActivity: '',
-      endEarlyActivity: ''
+      minutes: '3',
+      groupActivity: 'Project',
+      requiredActivity: 'Yes',
+      deliverableActivity: 'Yes',
+      endEarlyActivity: 'Creator has not allowed participants to end early after this activity'
     });
     const setupInstructions = ref({
       description: '',
