@@ -3,7 +3,7 @@
   "license": "MIT",
   "main": "/dist/index.ts",
   "name": "@pilotcityinc/developer-adk-demo",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "PilotCity Development Kit Template for creating your own Program Activities",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
