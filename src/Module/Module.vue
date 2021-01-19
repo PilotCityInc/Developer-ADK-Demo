@@ -338,11 +338,11 @@ body {
 }
 </style>
 <script lang="ts">
-import { computed, reactive, ref, toRefs } from '@vue/composition-api';
-import '@/styles/module.scss';
+import { defineComponent } from '@vue/composition-api';
+import '../styles/module.scss';
 import * as Module from './components';
 
-export default {
+export default defineComponent({
   name: 'ModuleName',
 
   components: {
@@ -351,15 +351,58 @@ export default {
     'module-presets': Module.Presets,
     'module-preview': Module.Default
   },
-  data: () => ({
-    events: [],
-    input: null,
-    nonce: 0
-  }),
-
+  data: () => {
+    return {
+      events: [],
+      input: '',
+      nonce: 0,
+      moduleName: 'Demonstration',
+      subpages: ['Setup', 'Presets', 'Monitor'],
+      currentPage: 'Setup',
+      pilotcityColors: [
+        ['#6eba80', '#3c9dcd', '#ea6764'],
+        ['#eda1bf', '#fec34b', '#bdbdbd'],
+        ['#ae90b0', '#f79961', '#000000']
+      ],
+      selectedColor: '#ae90b0',
+      config: {
+        description: '',
+        instruct: ['']
+      },
+      menu: false
+    } as {
+      events: {
+        id: number;
+        text: string;
+        time: string;
+      }[];
+      input: string;
+      nonce: number;
+      moduleName: string;
+      subpages: string[];
+      currentPage: string;
+      pilotcityColors: string[][];
+      selectedColor: string;
+      config: {
+        description: string;
+        instruct: string[];
+      };
+      menu: boolean;
+    };
+  },
   computed: {
-    timeline() {
+    timeline(): Array<{
+      id: number;
+      text: string;
+      time: string;
+    }> {
       return this.events.slice().reverse();
+    },
+    getComponent(): string {
+      return `module-${this.currentPage.toLowerCase()}`;
+    },
+    getColor(): string {
+      return this.selectedColor.substring(0, 7);
     }
   },
 
@@ -372,50 +415,50 @@ export default {
         time: time.replace(/:\d{2}\sGMT-\d{4}\s\((.*)\)/, (match, contents, offset) => {
           return ` ${contents
             .split(' ')
-            .map(v => v.charAt(0))
+            .map((v: string) => v.charAt(0))
             .join('')}`;
         })
       });
-      this.input = null;
+      this.input = '';
     }
-  },
-
-  setup() {
-    // ENTER ACTIVITY NAME BELOW
-    const moduleName = ref('Demonstration');
-    const page = reactive({
-      subpages: ['Setup', 'Presets', 'Monitor'],
-      currentPage: 'Setup'
-    });
-    const getComponent = computed(() => {
-      return `module-${page.currentPage.toLowerCase()}`;
-    });
-    const color = reactive({
-      pilotcityColors: [
-        ['#6eba80', '#3c9dcd', '#ea6764'],
-        ['#eda1bf', '#fec34b', '#bdbdbd'],
-        ['#ae90b0', '#f79961', '#000000']
-      ],
-      // ENTER ACTIVITY COLOR
-      selectedColor: '#ae90b0'
-    });
-    const getColor = computed(() => {
-      return color.selectedColor.substring(0, 7);
-    });
-    const config = ref({
-      description: '',
-      instruct: ['']
-    });
-    const menu = ref(false);
-    return {
-      ...toRefs(color as any),
-      ...toRefs(page as any),
-      config,
-      moduleName,
-      menu,
-      getComponent,
-      getColor
-    };
   }
-};
+
+  // setup() {
+  //   // ENTER ACTIVITY NAME BELOW
+  //   const moduleName = ref('Demonstration');
+  //   const page = reactive({
+  //     subpages: ['Setup', 'Presets', 'Monitor'],
+  //     currentPage: 'Setup'
+  //   });
+  //   const getComponent = computed(() => {
+  //     return `module-${page.currentPage.toLowerCase()}`;
+  //   });
+  //   const color = reactive({
+  //     pilotcityColors: [
+  //       ['#6eba80', '#3c9dcd', '#ea6764'],
+  //       ['#eda1bf', '#fec34b', '#bdbdbd'],
+  //       ['#ae90b0', '#f79961', '#000000']
+  //     ],
+  //     // ENTER ACTIVITY COLOR
+  //     selectedColor: '#ae90b0'
+  //   });
+  //   const getColor = computed(() => {
+  //     return color.selectedColor.substring(0, 7);
+  //   });
+  //   const config = ref({
+  //     description: '',
+  //     instruct: ['']
+  //   });
+  //   const menu = ref(false);
+  //   return {
+  //     ...toRefs(color as any),
+  //     ...toRefs(page as any),
+  //     config,
+  //     moduleName,
+  //     menu,
+  //     getComponent,
+  //     getColor
+  //   };
+  // }
+});
 </script>
