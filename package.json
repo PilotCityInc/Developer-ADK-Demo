@@ -17,7 +17,7 @@
     "prepare": "install-peers",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --setupTestFrameworkScriptFile=./tests/setup.ts",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -28,12 +28,15 @@
     "vee-validate": "^3.4.1"
   },
   "devDependencies": {
+    "@rollup/plugin-buble": "^0.21.3",
+    "@rollup/plugin-commonjs": "^17.1.0",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-prettier": "^6.0.0",
@@ -46,6 +49,7 @@
     "fork-ts-checker-webpack-plugin": "^6.1.0",
     "install-peers-cli": "^2.2.0",
     "prettier": "^1.19.1",
+    "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "typescript": "~3.9.3",
