@@ -113,7 +113,6 @@ export default {
   components: {
     Instruct
   },
-  apollo: {},
   setup() {
     const presets = reactive({
       maxMinutes,
