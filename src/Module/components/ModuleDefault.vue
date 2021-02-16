@@ -139,7 +139,6 @@ export default {
   components: {
     Instruct
   },
-  apollo: {},
   setup() {
     const link = ref('');
     const link2 = ref('');
