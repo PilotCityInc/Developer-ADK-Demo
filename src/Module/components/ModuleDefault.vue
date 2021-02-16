@@ -70,7 +70,7 @@
             outlined
             depressed
             :disabled="invalid"
-            @click="save()"
+            @click="verifyLink()"
             >Verify Link</v-btn
           >
         </div>
@@ -132,6 +132,8 @@
 
 <script lang="ts">
 import { ref } from '@vue/composition-api';
+import { get as httpsGet } from 'https';
+import { Video } from '@/@types';
 import Instruct from './ModuleInstruct.vue';
 
 export default {
@@ -147,17 +149,39 @@ export default {
       instructions: ['', '', '']
     });
     const showInstructions = ref(true);
-    function save() {
+    function verifyLink() {
       link2.value = link.value;
-      console.log(link2);
+      const videoId = 'gYPn3lbGRRc';
+
+      const { YOUTUBE_API_KEY } = process.env;
+      httpsGet(
+        {
+          hostname: 'www.googleapis.com',
+          path: `/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${videoId}&part=snippet,contentDetails,status`
+        },
+        res => {
+          let body = '';
+
+          res.on('data', chunk => {
+            body += chunk;
+          });
+
+          res.on('end', () => {
+            console.log(JSON.parse(body));
+            const video: Video = JSON.parse(body).items[0];
+            console.log('Got a response: ', video);
+          });
+        }
+      ).on('error', e => {
+        console.log('Got an error: ', e);
+      });
     }
-    console.log(link2);
 
     return {
       setupInstructions,
       showInstructions,
       link,
-      save,
+      verifyLink,
       link2
     };
   }
@@ -183,12 +207,9 @@ export default {
   }
 
   &__collapse-divider {
-    margin-top: 15px;
-    margin-bottom: 75px;
-    margin-right: none;
-    margin-left: none;
-    padding-right: none;
-    padding-left: none;
+    margin: 15px 0 75px;
+    padding-right: 0;
+    padding-left: 0;
     width: 100%;
   }
 
@@ -206,8 +227,8 @@ export default {
     // width: 100%;
     // padding: none;
     // margin: none;
-    margin-top: 0px;
-    padding: 0px;
+    margin-top: 0;
+    padding: 0;
   }
   &__employer-title {
     font-size: 25px;
@@ -292,7 +313,7 @@ export default {
     font-family: 'Raleway';
     font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: white;
     font-style: italic;
   }
@@ -302,7 +323,7 @@ export default {
     font-family: 'Raleway';
     font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #404142;
     font-style: italic;
   }
@@ -312,7 +333,7 @@ export default {
     font-family: 'Raleway';
     font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #404142;
   }
 
