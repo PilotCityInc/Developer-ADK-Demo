@@ -16,7 +16,7 @@
                     <v-icon color="grey lighten-2" class="d-flex justify-center">
                       mdi-chevron-down
                     </v-icon>
-                    <div color="grey lighten-2" class="module-default__collapse-title">
+                    <div class="module-default__collapse-title">
                       INSTRUCTIONS
                     </div>
                   </div>
@@ -56,11 +56,12 @@
           >
             <v-text-field
               v-model="link"
-              label="Prototype Demonstration Video"
-              :error-messages="errors"
+              :error-messages="errors.concat(apiErrors)"
               outlined
+              label="Prototype Demonstration Video"
               placeholder="Enter YouTube video link"
               prepend-inner-icon="mdi-youtube"
+              @input="apiErrors = []"
             ></v-text-field>
           </validation-provider>
 
@@ -110,12 +111,13 @@
         </div>
         <!-- <div class="module-default__youtube"></div> -->
         <iframe
+          v-if="submittedLink"
           class="module-default__youtube"
-          :src="link2"
+          :src="submittedLink"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-        ></iframe>
+        />
         <!-- <v-text-field
         disabled
         placeholder="3:25"
@@ -132,7 +134,12 @@
 
 <script lang="ts">
 import { ref } from '@vue/composition-api';
+// eslint says it can't find these modules from @types/node
+// can be fixed by removing "./node_modules/@types" from typeRoots in tsconfig.json
+// but then you get errors for unit test related imports
+// anyway this doesn't matter since it will be server-side
 import { get as httpsGet } from 'https';
+import { parse as queryParse } from 'querystring';
 import { Video } from '@/@types';
 import Instruct from './ModuleInstruct.vue';
 
@@ -143,17 +150,36 @@ export default {
   },
   setup() {
     const link = ref('');
-    const link2 = ref('');
+    const submittedLink = ref('');
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
     });
     const showInstructions = ref(true);
-    function verifyLink() {
-      link2.value = link.value;
-      const videoId = 'gYPn3lbGRRc';
 
-      const { YOUTUBE_API_KEY } = process.env;
+    const apiErrors = ref([]);
+    function verifyLink() {
+      const checkedLink = link.value;
+      const videoUrl = new URL(checkedLink);
+      const YOUTUBE_API_KEY = undefined;
+      if (!YOUTUBE_API_KEY)
+        alert(
+          `
+            Give YouTube API key at ModuleDefault.vue#164 (don't push it to repo, this is just for local testing)
+            Going to be removed when validation moves to server side
+          `
+        );
+
+      let videoId: string;
+      // match https://www.youtube.com/watch?v=Jr4xNwB_f2Q
+      if (videoUrl.hostname.includes('youtube') && videoUrl.pathname.includes('/watch'))
+        // slice to get rid of leading '?'
+        videoId = queryParse(videoUrl.search.slice(1)).v;
+      // match https://youtu.be/v=Jr4xNwB_f2Q
+      else if (videoUrl.hostname.includes('youtu.be'))
+        // slice to get rid of leading '/'
+        videoId = videoUrl.pathname.slice(1);
+
       httpsGet(
         {
           hostname: 'www.googleapis.com',
@@ -167,9 +193,34 @@ export default {
           });
 
           res.on('end', () => {
-            console.log(JSON.parse(body));
-            const video: Video = JSON.parse(body).items[0];
-            console.log('Got a response: ', video);
+            const video: Video | undefined = JSON.parse(body).items[0];
+            if (!video) {
+              apiErrors.value.push("Video Doesn't Exist or is Private");
+              return;
+            }
+            console.log('Got a video: ', video);
+
+            const iso8601DurationRegex = /P(?:([.,\d]+)D)?T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?/;
+            const matches = video.contentDetails.duration.match(iso8601DurationRegex);
+            const duration = {
+              days: Number(matches[1] ?? 0),
+              hours: Number(matches[2] ?? 0),
+              minutes: Number(matches[3] ?? 0),
+              seconds: Number(matches[4] ?? 0)
+            };
+
+            if (
+              !duration.days &&
+              !duration.hours &&
+              // TODO: use duration from module settings instead of just 3 min
+              (duration.minutes < 3 || (duration.minutes === 3 && !duration.seconds))
+            ) {
+              // TODO: save link response to db
+              submittedLink.value = `https://www.youtube.com/embed/${videoId}`;
+            } else {
+              // show error
+              apiErrors.value.push("Video Doesn't Match Required Length");
+            }
           });
         }
       ).on('error', e => {
@@ -181,8 +232,9 @@ export default {
       setupInstructions,
       showInstructions,
       link,
-      verifyLink,
-      link2
+      submittedLink,
+      apiErrors,
+      verifyLink
     };
   }
 };
