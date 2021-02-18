@@ -4,14 +4,14 @@
       <div class="module-outcomes__container">
         <!-- <v-divider class="presets__divider"></v-divider> -->
         <div class="presets__section-title">General</div>
-        <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span>
+        <!-- <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span> -->
         <validation-provider v-slot="{ errors }" slim rules="numeric">
           <v-select
             v-model="minutes"
             outlined
             :items="maxMinutes"
             :error-messages="errors"
-            label="Maximum minutes"
+            label="Maximum minutes for demo video"
           ></v-select>
         </validation-provider>
         <!-- <div class="presets__nopresets">No tweaking necessary</div> -->
@@ -43,10 +43,10 @@
         </validation-provider>
 
         <!-- <v-select
-        :items="lockOrder"
-        label="Lock activity group and placement order?"
-        outlined
-      ></v-select> -->
+          :items="lockOrder"
+          label="Lock activity group and placement order?"
+          outlined
+        ></v-select> -->
         <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
             v-model="deliverableActivity"
@@ -58,10 +58,10 @@
           ></v-select>
         </validation-provider>
         <!-- <v-select
-        :items="accessibility"
-        label="Make this activity accessible to participants anytime?"
-        outlined
-      ></v-select> -->
+          :items="accessibility"
+          label="Make this activity accessible to participants anytime?"
+          outlined
+        ></v-select> -->
         <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
             v-model="endEarlyActivity"
@@ -74,31 +74,32 @@
         </validation-provider>
         <!-- POST-ACTIVITY REFLECTION -->
         <!-- <v-text-field
-        label="Post-Activity Reflection"
-        placeholder="Now that you know the scope of the project, provide a summary of your interpretation."
-        outlined
-        hide-details
-      ></v-text-field>
-      <div class="presets__reflection">
-        <v-btn class="presets__reflection-buttons" small depressed outlined>Save</v-btn>
-        <v-btn class="presets__reflection-buttons" small depressed outlined>Preview</v-btn>
-      </div> -->
+          label="Post-Activity Reflection"
+          placeholder="Now that you know the scope of the project, provide a summary of your interpretation."
+          outlined
+          hide-details
+        ></v-text-field>
+        <div class="presets__reflection">
+          <v-btn class="presets__reflection-buttons" small depressed outlined>Save</v-btn>
+          <v-btn class="presets__reflection-buttons" small depressed outlined>Preview</v-btn>
+        </div> -->
         <v-divider class="presets__divider"></v-divider>
         <!-- If activity is required, show button below, make tooltip show up while disabled, right now tooltip doesn't show up -->
         <!-- <div>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="red" disabled v-bind="attrs" v-on="on">Delete Activity</v-btn>
-          </template>
-          <span>Required activities cannot be deleted</span>
-        </v-tooltip>
-      </div> -->
-      <!-- Delete break when the two delete buttons above and below have been integrated as one solution -->
-      <br />
-      <!-- If activity is optional, show button below -->
-      <div><v-btn color="red" disabled depressed>Delete Activity</v-btn></div>
-    </div>
-  </v-container>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="red" disabled v-bind="attrs" v-on="on">Delete Activity</v-btn>
+            </template>
+            <span>Required activities cannot be deleted</span>
+          </v-tooltip>
+        </div> -->
+        <!-- Delete break when the two delete buttons above and below have been integrated as one solution -->
+        <br />
+        <!-- If activity is optional, show button below -->
+        <div><v-btn color="red" disabled depressed>Delete Activity</v-btn></div>
+      </div>
+    </v-container>
+  </ValidationObserver>
 </template>
 
 <script lang="ts">

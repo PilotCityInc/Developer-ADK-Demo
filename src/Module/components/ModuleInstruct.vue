@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver v-slot="{ invalid }" slim>
+  <ValidationObserver v-slot="{}" slim>
     <!--  TODO: make the inputs into actual components -->
     <v-container class="module-instruct">
       <div class="module-instruct__container">
