@@ -93,13 +93,12 @@
           <span>Required activities cannot be deleted</span>
         </v-tooltip>
       </div> -->
-        <!-- Delete break when the two delete buttons above and below have been integrated as one solution -->
-        <br />
-        <!-- If activity is optional, show button below -->
-        <div><v-btn color="red" dark depressed>Delete Activity</v-btn></div>
-      </div>
-    </v-container>
-  </ValidationObserver>
+      <!-- Delete break when the two delete buttons above and below have been integrated as one solution -->
+      <br />
+      <!-- If activity is optional, show button below -->
+      <div><v-btn color="red" disabled depressed>Delete Activity</v-btn></div>
+    </div>
+  </v-container>
 </template>
 
 <script lang="ts">
