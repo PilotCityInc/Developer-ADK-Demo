@@ -55,11 +55,12 @@
             }"
           >
             <v-text-field
+              rounded
               v-model="link"
               :error-messages="errors.concat(apiErrors)"
               outlined
-              label="Prototype Demonstration Video"
-              placeholder="Enter YouTube video link"
+              label="YouTube: Enter 5-Minute Project Video"
+              placeholder="https://youtu.be/yourvideocode"
               prepend-inner-icon="mdi-youtube"
               @input="apiErrors = []"
             ></v-text-field>
@@ -67,6 +68,7 @@
 
           <v-btn
             class="module-default__youtube-verify-button ml-3"
+            rounded
             x-large
             outlined
             depressed
@@ -75,7 +77,7 @@
             >Verify Link</v-btn
           >
         </div>
-        <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
+        <v-chip-group column multiple class="module-default__youtube-data mb-8">
           <v-chip class="mr-2" dark small label color="green">
             <v-icon small left>mdi-check-bold</v-icon>
             Verified YouTube Video
@@ -101,15 +103,19 @@
             <v-icon small left>mdi-close-thick</v-icon>
             Make Video Public or Unlisted
           </v-chip>
-        </v-chip-group> -->
+        </v-chip-group>
         <div>
-          <v-btn outlined color="grey darken-1" class="mb-6" depressed x-small label>
+          <v-btn rounded outlined color="grey darken-1" class="mb-4 mt-4" depressed x-small label>
             <!-- <v-icon left>mdi-check</v-icon> -->
-            Team Yeezy Prototype Demonstration Video
+            Video name goes here
             <v-icon x-small right>mdi-open-in-new</v-icon>
           </v-btn>
         </div>
-        <!-- <div class="module-default__youtube"></div> -->
+        <div
+          class="d-flex headline font-weight-bold justify-center align-center module-default__youtube"
+        >
+          No video yet
+        </div>
         <iframe
           v-if="submittedLink"
           class="module-default__youtube"
@@ -300,10 +306,10 @@ export default {
     border-radius: 5px;
     margin-left: auto;
     margin-right: auto;
-    // border: 2px solid #dedede;
+    // border: 5px solid #dedede;
     // margin: 0px;
-    // background-color: #dedede;
-
+    background-color: #dedede;
+    color: #ffffff;
     // text-align: center;
     // justify-content: center;
     // align-items: center;

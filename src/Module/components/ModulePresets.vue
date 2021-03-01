@@ -11,7 +11,7 @@
             outlined
             :items="maxMinutes"
             :error-messages="errors"
-            label="Maximum minutes for demo video"
+            label="Maximum minutes for delivered YouTube video"
           ></v-select>
         </validation-provider>
         <!-- <div class="presets__nopresets">No tweaking necessary</div> -->

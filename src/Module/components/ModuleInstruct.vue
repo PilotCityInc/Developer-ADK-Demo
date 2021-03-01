@@ -85,12 +85,12 @@ export default {
     //   }
     // });
     const boilerInstructions = ref([
-      'Click resource link',
-      'Review, complete or understand resource contents',
-      'Mark completed until all finished'
+      'Plan and prep your demonstration and presentation video',
+      'Record video with tool of choice and upload to YouTube. Make sure video is under the maximum duration set by employer',
+      'Set YouTube video to "Unlisted" or "Public" and insert link to verify and deliver video'
     ]);
     const goal = ref([
-      'To research employer-provided resources, links, examples, possibilities & direction for projects'
+      'To demonstrate and present your final project with an uploaded YouTube video'
     ]);
     // function populate() {
     //   boilerInstructions.value.push('');
