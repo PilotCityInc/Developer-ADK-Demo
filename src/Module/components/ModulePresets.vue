@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver v-slot="{}" slim>
+  <ValidationObserver v-slot="{ invalid }" slim>
     <v-container class="module-outcomes">
       <div class="module-outcomes__container">
         <!-- <v-divider class="presets__divider"></v-divider> -->
@@ -7,7 +7,7 @@
         <!-- <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span> -->
         <validation-provider v-slot="{ errors }" slim rules="numeric">
           <v-select
-            v-model="minutes"
+            v-model="programDoc.data.adks[index].videoMaxLength"
             outlined
             :items="maxMinutes"
             :error-messages="errors"
@@ -97,23 +97,54 @@
         <br />
         <!-- If activity is optional, show button below -->
         <div><v-btn color="red" disabled depressed>Delete Activity</v-btn></div>
+
+        <div class="module-default__scope mt-12">
+          <v-btn
+            x-large
+            depressed
+            outlined
+            :disabled="invalid"
+            :loading="loading"
+            @click="process()"
+          >
+            Save
+          </v-btn>
+        </div>
+        <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
+          message
+        }}</v-alert>
       </div>
     </v-container>
   </ValidationObserver>
 </template>
 
 <script lang="ts">
-import { reactive, ref, toRefs } from '@vue/composition-api';
+import { reactive, ref, toRefs, PropType, computed } from '@vue/composition-api';
+import { createLoader } from 'pcv4lib/src';
 import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, maxMinutes } from './const';
-// import gql from 'graphql-tag';
+import { MongoDoc } from '../types';
 
 export default {
   name: 'ModulePresets',
   components: {
     Instruct
   },
-  setup() {
+  props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    }
+  },
+  setup(props, ctx) {
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
+
     const presets = reactive({
       maxMinutes,
       group,
@@ -122,7 +153,7 @@ export default {
       endEarly
     });
     const defaultActivity = reactive({
-      minutes: '3',
+      minutes: 3,
       groupActivity: 'Project',
       requiredActivity: 'Yes',
       deliverableActivity: 'Yes',
@@ -135,7 +166,10 @@ export default {
     return {
       ...toRefs(presets),
       setupInstructions,
-      ...toRefs(defaultActivity)
+      ...toRefs(defaultActivity),
+      programDoc,
+      index,
+      ...createLoader(programDoc.value.update, 'Saved', 'Something went wrong, try again later')
     };
   }
 };

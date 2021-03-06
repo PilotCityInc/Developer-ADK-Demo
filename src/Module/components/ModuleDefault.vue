@@ -50,7 +50,7 @@
             v-slot="{ errors }"
             slim
             :rules="{
-              regex: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+              regex: /^((?:https?:)?\/\/)((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
               required: true
             }"
           >
@@ -59,7 +59,7 @@
               rounded
               :error-messages="errors.concat(apiErrors)"
               outlined
-              label="YouTube: Enter 5-Minute Project Video"
+              :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"
               placeholder="https://youtu.be/yourvideocode"
               prepend-inner-icon="mdi-youtube"
               @input="apiErrors = []"
@@ -72,12 +72,13 @@
             x-large
             outlined
             depressed
+            :loading="verifyLoading"
             :disabled="invalid"
             @click="verifyLink()"
             >Verify Link</v-btn
           >
         </div>
-        <v-chip-group column multiple class="module-default__youtube-data mb-8">
+        <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
           <v-chip class="mr-2" dark small label color="green">
             <v-icon small left>mdi-check-bold</v-icon>
             Verified YouTube Video
@@ -103,7 +104,7 @@
             <v-icon small left>mdi-close-thick</v-icon>
             Make Video Public or Unlisted
           </v-chip>
-        </v-chip-group>
+        </v-chip-group> -->
         <div
           v-if="!submittedVideo"
           class="d-flex headline font-weight-bold justify-center align-center module-default__youtube"
@@ -196,7 +197,9 @@ export default {
 
     const apiErrors = ref<Array<string>>([]);
 
+    const verifyLoading = ref(false);
     async function verifyLink() {
+      verifyLoading.value = true;
       const user: Realm.User = props.currentUser as Realm.User;
       const res: {
         statusCode: number;
@@ -216,14 +219,17 @@ export default {
       } else if (res.error) {
         apiErrors.value.push(res.error);
       }
+      verifyLoading.value = false;
     }
 
     return {
       setupInstructions,
       showInstructions,
       link,
+      videoMaxLength: ref(programDoc.value.data.adks[index].videoMaxLength),
       submittedVideo,
       apiErrors,
+      verifyLoading,
       verifyLink
     };
   }
