@@ -8188,6 +8188,11 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+pcv4lib@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/pcv4lib/-/pcv4lib-1.0.10.tgz#001c1786a0d30fa9db9964ed3f3e451c7599de7d"
+  integrity sha512-JXhcZ5hRknT+rz/j+GebadnNliPXWZSB7unFzGWA8lhJcwsfEFmTuWh8t5Zu9BfxpceSb+5M9X4WOK2schpx2A==
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"

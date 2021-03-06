@@ -100,7 +100,7 @@
         </div>
         <div class="module__page">
           <keep-alive>
-            <component :is="getComponent" />
+            <component :is="getComponent" v-model="programDoc" :current-user="currentUser" />
           </keep-alive>
         </div>
       </div>
@@ -264,9 +264,12 @@ body {
 }
 </style>
 <script lang="ts">
-import { computed, reactive, ref, toRefs, defineComponent } from '@vue/composition-api';
+import { computed, reactive, ref, toRefs, defineComponent, PropType } from '@vue/composition-api';
+import * as Realm from 'realm-web';
+// import { getModMongoDoc } from 'pcv4lib';
 import '../styles/module.scss';
 import * as Module from './components';
+import MongoDoc from './types';
 
 export default defineComponent({
   name: 'ModuleName',
@@ -277,22 +280,45 @@ export default defineComponent({
     'module-presets': Module.Presets,
     'module-preview': Module.Default
   },
-  //   props: {
-  // programCollection: {
-  //   required: true,
-  //   type: Object as PropType<Collection>
-  // },
-  // programId: {
-  //   require: true,
-  //   type: String
-  // }
-  //   },
-  setup() {
-    //
-    // props.programCollection.findOne({
-    //   _id: props.programId
-    // });
-    // ENTER ACTIVITY NAME BELOW
+  props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
+    currentUser: {
+      required: true,
+      type: Object as PropType<Realm.User>
+    }
+  },
+  setup(props, ctx) {
+    console.log('module props: ', props);
+    const currentUser = ref(props.currentUser);
+
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+    const index = programDoc.value.data.adks.findIndex((obj: any) => {
+      return obj.name === 'demo';
+    });
+    if (index === -1) {
+      const initRfp = {
+        name: 'demo',
+        videoMaxLength: 3
+      };
+      programDoc.value.data.adks.push(initRfp);
+    }
+
+    // const teamDoc = getModMongoDoc(
+    //   props,
+    //   ctx.emit,
+    //   { demoVideoId: '' },
+    //   'teamDoc',
+    //   'input.teamDoc'
+    // );
+
     const moduleName = ref('Demonstration');
     const page = reactive({
       subpages: ['Setup', 'Presets', 'Monitor'],
