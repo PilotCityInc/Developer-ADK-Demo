@@ -1,7 +1,14 @@
 <template>
-  <v-app>
-    <Module v-model="programDocStub" :current-user="currentUser" />
-  </v-app>
+  <div>
+    <input v-model="email" type="text" placeholder="email" />
+    <input v-model="password" type="password" placeholder="password" />
+    <button type="submit" @click="logIn()">log in</button>
+    |
+    <button type="submit" @click="logOut()">log out</button>
+    <v-app>
+      <Module v-model="programDocStub" :current-user="currentUser" />
+    </v-app>
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,18 +44,28 @@ export default defineComponent({
     });
 
     const app = new Realm.App({ id: 'programdev-aogmg' });
-    const email = undefined;
-    const password = undefined;
-    if (!email || !password) {
-      throw Error('ENTER ACCOUNT EMAIL AND PASSWORD TO TEST');
+    const email = ref('');
+    const password = ref('');
+
+    async function logIn() {
+      const creds = Realm.Credentials.emailPassword(email.value, password.value);
+      await app.logIn(creds);
+      window.location.reload();
     }
-    const creds = Realm.Credentials.emailPassword(email, password);
-    app.logIn(creds);
+    async function logOut() {
+      await app.currentUser?.logOut();
+      window.location.reload();
+    }
+
     const currentUser = computed(() => app.currentUser);
 
     return {
       programDocStub,
-      currentUser
+      currentUser,
+      email,
+      password,
+      logIn,
+      logOut
     };
   }
 });
