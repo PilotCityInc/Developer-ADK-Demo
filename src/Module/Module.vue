@@ -299,9 +299,7 @@ export default defineComponent({
         ctx.emit('input', newVal);
       }
     });
-    const index = programDoc.value.data.adks.findIndex((obj: any) => {
-      return obj.name === 'demo';
-    });
+    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
     if (index === -1) {
       const initDemo = {
         name: 'demo',

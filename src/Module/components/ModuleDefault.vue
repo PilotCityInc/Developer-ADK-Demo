@@ -148,28 +148,27 @@ export default {
     Instruct
   },
   props: {
-    // value: {
-    //   required: true,
-    //   type: Object as PropType<MongoDoc>
-    // },
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
     currentUser: {
       required: true,
       type: Object as PropType<Realm.User>
     }
   },
   setup(props, ctx) {
-    // const programDoc = computed({
-    //   get: () => props.value,
-    //   set: newVal => {
-    //     ctx.emit('input', newVal);
-    //   }
-    // });
-    // const index = programDoc.value.data.adks.findIndex(() => {
-    //   obj.name === 'demo';
-    // });
-    // console.log(programDoc.value.data.adks[index].videoMaxLength);
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
+    console.log(programDoc.value.data.adks[index].videoMaxLength);
 
     const link = ref('');
+    // TODO: when teamDoc works, add submitted link from there if it exists
     const submittedLink = ref('');
     const setupInstructions = ref({
       description: '',
@@ -189,10 +188,10 @@ export default {
         operation: 'submitResponse',
         payload: {
           videoLink: link.value,
-          videoMaxLength: 4 // TODO: use value from programDoc
+          // TODO: probably want to move this part to server side
+          videoMaxLength: programDoc.value.data.adks[index].videoMaxLength
         }
       });
-      console.log('res', res);
       if (res.statusCode === 200) {
         submittedLink.value = `https://www.youtube.com/embed/${res.body.submittedVideo}`;
       } else if (res.error) {
