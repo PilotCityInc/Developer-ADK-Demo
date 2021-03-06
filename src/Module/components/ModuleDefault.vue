@@ -1,6 +1,6 @@
 <template>
   <ValidationObserver v-slot="{ invalid }" slim>
-    <v-container class="module-default__container">
+    <div>
       <div class="module-default__instructions">
         <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
           <v-expansion-panel>
@@ -44,7 +44,7 @@
         buffer-value="100"
         stream
       />
-      <div class="module-edit__container">
+      <div class="module-default__scope">
         <div class="module-default__row">
           <validation-provider
             v-slot="{ errors }"
@@ -132,7 +132,6 @@
           <iframe
             class="module-default__youtube"
             :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
-            frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           />
@@ -147,7 +146,7 @@
         <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
         <!-- <div class="module-default__none">Design your activity here</div> -->
       </div>
-    </v-container>
+    </div>
   </ValidationObserver>
 </template>
 
@@ -293,6 +292,7 @@ export default {
   &__youtube {
     width: 100%;
     height: 330px;
+    border: 0;
     border-radius: 5px;
     margin-left: auto;
     margin-right: auto;
