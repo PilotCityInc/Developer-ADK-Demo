@@ -55,8 +55,8 @@
             }"
           >
             <v-text-field
-              rounded
               v-model="link"
+              rounded
               :error-messages="errors.concat(apiErrors)"
               outlined
               label="YouTube: Enter 5-Minute Project Video"
@@ -104,26 +104,38 @@
             Make Video Public or Unlisted
           </v-chip>
         </v-chip-group>
-        <div>
-          <v-btn rounded outlined color="grey darken-1" class="mb-4 mt-4" depressed x-small label>
-            <!-- <v-icon left>mdi-check</v-icon> -->
-            Video name goes here
-            <v-icon x-small right>mdi-open-in-new</v-icon>
-          </v-btn>
-        </div>
         <div
+          v-if="!submittedVideo"
           class="d-flex headline font-weight-bold justify-center align-center module-default__youtube"
         >
           No video yet
         </div>
-        <iframe
-          v-if="submittedLink"
-          class="module-default__youtube"
-          :src="submittedLink"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        />
+        <div v-else>
+          <div>
+            <v-btn
+              rounded
+              outlined
+              color="grey darken-1"
+              class="mb-4 mt-4"
+              depressed
+              x-small
+              label
+              :href="`https://youtu.be/${submittedVideo.id}`"
+            >
+              <!-- <v-icon left>mdi-check</v-icon> -->
+              {{ submittedVideo.snippet.title }}
+              <v-icon x-small right>mdi-open-in-new</v-icon>
+            </v-btn>
+          </div>
+
+          <iframe
+            class="module-default__youtube"
+            :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
         <!-- <v-text-field
         disabled
         placeholder="3:25"
@@ -146,7 +158,7 @@ import * as Realm from 'realm-web';
 // but then you get errors for unit test related imports
 // anyway this doesn't matter since it will be server-side
 import Instruct from './ModuleInstruct.vue';
-import MongoDoc from '../types';
+import { MongoDoc, Video } from '../types';
 
 export default {
   name: 'ModuleDefault',
@@ -175,7 +187,7 @@ export default {
 
     const link = ref('');
     // TODO: when teamDoc works, add submitted link from there if it exists
-    const submittedLink = ref('');
+    const submittedVideo = ref<Video | undefined>();
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
@@ -189,7 +201,7 @@ export default {
       const res: {
         statusCode: number;
         error?: string;
-        body?: { submittedVideo: string };
+        body?: { submittedVideo: Video };
       } = await user.callFunction('ADK_Demo', {
         operation: 'submitResponse',
         payload: {
@@ -199,7 +211,8 @@ export default {
         }
       });
       if (res.statusCode === 200) {
-        submittedLink.value = `https://www.youtube.com/embed/${res.body.submittedVideo}`;
+        submittedVideo.value = res.body!.submittedVideo;
+        // submittedVideo.value.
       } else if (res.error) {
         apiErrors.value.push(res.error);
       }
@@ -209,7 +222,7 @@ export default {
       setupInstructions,
       showInstructions,
       link,
-      submittedLink,
+      submittedVideo,
       apiErrors,
       verifyLink
     };

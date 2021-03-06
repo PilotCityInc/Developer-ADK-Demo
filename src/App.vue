@@ -15,7 +15,7 @@
 import { computed, defineComponent, ref, Ref } from '@vue/composition-api';
 import * as Realm from 'realm-web';
 import Module from './Module/Module.vue';
-import MongoDoc from './Module/types';
+import { MongoDoc } from './Module/types';
 
 export default defineComponent({
   name: 'App',

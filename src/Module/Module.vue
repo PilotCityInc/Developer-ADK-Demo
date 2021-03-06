@@ -265,7 +265,7 @@ import * as Realm from 'realm-web';
 // import { getModMongoDoc } from 'pcv4lib';
 import '../styles/module.scss';
 import * as Module from './components';
-import MongoDoc from './types';
+import { MongoDoc } from './types';
 
 export default defineComponent({
   name: 'ModuleName',
