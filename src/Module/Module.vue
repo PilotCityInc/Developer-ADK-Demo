@@ -3,7 +3,7 @@
   <v-container class="module">
     <div class="module__navbar">
       <!-- <v-btn
-        v-if="currentPage == 'preview'"
+        v-if="currentPage === 'Preview'"
         dark
         class="module__navbar-button"
         small
@@ -13,28 +13,28 @@
         >00:00:00</v-btn
       > -->
       <v-btn
-        v-if="currentPage != 'preview'"
+        v-if="currentPage !== 'Preview'"
         class="module__navbar-button"
         outlined
         x-small
         depressed
-        @click="currentPage = 'preview'"
+        @click="currentPage = 'Preview'"
         >Preview</v-btn
       >
       <v-btn
-        v-if="currentPage == 'preview'"
+        v-if="currentPage === 'Preview'"
         class="module__navbar-button"
         dark
         x-small
         depressed
         color="red"
-        @click="currentPage = 'setup'"
+        @click="currentPage = 'Setup'"
         >Exit Preview</v-btn
       >
 
       <!-- COMMENT OUT UNTIL VERSION WHERE CUSTOMIZABILITY IS ALLOWED -->
 
-      <!-- <v-menu v-if="currentPage != 'preview'" offset-y left>
+      <!-- <v-menu v-if="currentPage !== 'Preview'" offset-y left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" small icon class="module__navbar-button" v-on="on">
             <v-icon color="grey lighten-1">mdi-cog</v-icon></v-btn
@@ -77,15 +77,15 @@
       </div>
       <div class="module__body">
         <v-progress-linear
-          v-if="currentPage != 'preview'"
+          v-if="currentPage !== 'Preview'"
           color="#dedede"
           height="2"
           value="100"
           buffer-value="100"
           stream
         />
-        <div v-if="currentPage != 'preview'" class="module__pagination">
-          <div v-for="page in subpages" :key="page" :class="{ active: currentPage == page }">
+        <div v-if="currentPage !== 'Preview'" class="module__pagination">
+          <div v-for="page in subpages" :key="page" :class="{ active: currentPage === page }">
             <div class="module__pagination-button--active" />
             <v-btn
               :ripple="false"
@@ -102,7 +102,7 @@
         </div>
         <div class="module__page">
           <keep-alive>
-            <component :is="getComponent" />
+            <component :is="getComponent" v-model="programDoc" :current-user="currentUser" />
           </keep-alive>
         </div>
       </div>
@@ -110,7 +110,7 @@
     <!-- TIMELINE START -->
 
     <!-- <template>
-      <v-container v-if="currentPage == 'preview'" style="max-width: 675px">
+      <v-container v-if="currentPage === 'Preview'" style="max-width: 675px">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" small :color="selectedColor" dark depressed v-on="on"
@@ -260,9 +260,12 @@ body {
 }
 </style>
 <script lang="ts">
-import { computed, reactive, ref, toRefs, defineComponent } from '@vue/composition-api';
+import { computed, reactive, ref, toRefs, defineComponent, PropType } from '@vue/composition-api';
+import * as Realm from 'realm-web';
+// import { getModMongoDoc } from 'pcv4lib';
 import '../styles/module.scss';
 import * as Module from './components';
+import MongoDoc from './types';
 
 export default defineComponent({
   name: 'ModuleName',
@@ -273,22 +276,42 @@ export default defineComponent({
     'module-presets': Module.Presets,
     'module-preview': Module.Default
   },
-  //   props: {
-  // programCollection: {
-  //   required: true,
-  //   type: Object as PropType<Collection>
-  // },
-  // programId: {
-  //   require: true,
-  //   type: String
-  // }
-  //   },
-  setup() {
-    //
-    // props.programCollection.findOne({
-    //   _id: props.programId
-    // });
-    // ENTER ACTIVITY NAME BELOW
+  props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
+    currentUser: {
+      required: true,
+      type: Object as PropType<Realm.User>
+    }
+  },
+  setup(props, ctx) {
+    console.log('module props: ', props);
+
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
+    if (index === -1) {
+      const initDemo = {
+        name: 'demo',
+        videoMaxLength: 3
+      };
+      programDoc.value.data.adks.push(initDemo);
+    }
+
+    // const teamDoc = getModMongoDoc(
+    //   props,
+    //   ctx.emit,
+    //   { demoVideoId: '' },
+    //   'teamDoc',
+    //   'input.teamDoc'
+    // );
+
     const moduleName = ref('Demonstration');
     const page = reactive({
       subpages: ['Setup', 'Presets'],
@@ -351,7 +374,8 @@ export default defineComponent({
       getColor,
       ...toRefs(timelineData),
       timeline,
-      comment
+      comment,
+      programDoc
     };
   }
 });

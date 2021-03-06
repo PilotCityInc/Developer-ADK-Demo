@@ -139,23 +139,42 @@
 </template>
 
 <script lang="ts">
-import { ref } from '@vue/composition-api';
+import { computed, ref, PropType } from '@vue/composition-api';
+import * as Realm from 'realm-web';
 // eslint says it can't find these modules from @types/node
 // can be fixed by removing "./node_modules/@types" from typeRoots in tsconfig.json
 // but then you get errors for unit test related imports
 // anyway this doesn't matter since it will be server-side
-import { get as httpsGet } from 'https';
-import { parse as queryParse } from 'querystring';
-import { Video } from '@/@types';
 import Instruct from './ModuleInstruct.vue';
+import MongoDoc from '../types';
 
 export default {
   name: 'ModuleDefault',
   components: {
     Instruct
   },
-  setup() {
+  props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
+    currentUser: {
+      required: true,
+      type: Object as PropType<Realm.User>
+    }
+  },
+  setup(props, ctx) {
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
+    console.log(programDoc.value.data.adks[index].videoMaxLength);
+
     const link = ref('');
+    // TODO: when teamDoc works, add submitted link from there if it exists
     const submittedLink = ref('');
     const setupInstructions = ref({
       description: '',
@@ -163,75 +182,27 @@ export default {
     });
     const showInstructions = ref(true);
 
-    const apiErrors = ref([]);
-    function verifyLink() {
-      const checkedLink = link.value;
-      const videoUrl = new URL(checkedLink);
-      const YOUTUBE_API_KEY = undefined;
-      if (!YOUTUBE_API_KEY)
-        alert(
-          `
-            Give YouTube API key at ModuleDefault.vue#164 (don't push it to repo, this is just for local testing)
-            Going to be removed when validation moves to server side
-          `
-        );
+    const apiErrors = ref<Array<string>>([]);
 
-      let videoId: string;
-      // match https://www.youtube.com/watch?v=Jr4xNwB_f2Q
-      if (videoUrl.hostname.includes('youtube') && videoUrl.pathname.includes('/watch'))
-        // slice to get rid of leading '?'
-        videoId = queryParse(videoUrl.search.slice(1)).v;
-      // match https://youtu.be/v=Jr4xNwB_f2Q
-      else if (videoUrl.hostname.includes('youtu.be'))
-        // slice to get rid of leading '/'
-        videoId = videoUrl.pathname.slice(1);
-
-      httpsGet(
-        {
-          hostname: 'www.googleapis.com',
-          path: `/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${videoId}&part=snippet,contentDetails,status`
-        },
-        res => {
-          let body = '';
-
-          res.on('data', chunk => {
-            body += chunk;
-          });
-
-          res.on('end', () => {
-            const video: Video | undefined = JSON.parse(body).items[0];
-            if (!video) {
-              apiErrors.value.push("Video Doesn't Exist or is Private");
-              return;
-            }
-            console.log('Got a video: ', video);
-
-            const iso8601DurationRegex = /P(?:([.,\d]+)D)?T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?/;
-            const matches = video.contentDetails.duration.match(iso8601DurationRegex);
-            const duration = {
-              days: Number(matches[1] ?? 0),
-              hours: Number(matches[2] ?? 0),
-              minutes: Number(matches[3] ?? 0),
-              seconds: Number(matches[4] ?? 0)
-            };
-
-            if (
-              !duration.days &&
-              !duration.hours &&
-              // TODO: use duration from module settings instead of just 3 min
-              (duration.minutes < 3 || (duration.minutes === 3 && !duration.seconds))
-            ) {
-              // TODO: save link response to db
-              submittedLink.value = `https://www.youtube.com/embed/${videoId}`;
-            } else {
-              // show error
-              apiErrors.value.push("Video Doesn't Match Required Length");
-            }
-          });
+    async function verifyLink() {
+      const user: Realm.User = props.currentUser as Realm.User;
+      const res: {
+        statusCode: number;
+        error?: string;
+        body?: { submittedVideo: string };
+      } = await user.callFunction('ADK_Demo', {
+        operation: 'submitResponse',
+        payload: {
+          videoLink: link.value,
+          // TODO: probably want to move this part to server side
+          videoMaxLength: programDoc.value.data.adks[index].videoMaxLength
         }
-      ).on('error', e => {
-        console.log('Got an error: ', e);
       });
+      if (res.statusCode === 200) {
+        submittedLink.value = `https://www.youtube.com/embed/${res.body.submittedVideo}`;
+      } else if (res.error) {
+        apiErrors.value.push(res.error);
+      }
     }
 
     return {
