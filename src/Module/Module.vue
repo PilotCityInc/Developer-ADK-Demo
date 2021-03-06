@@ -292,7 +292,6 @@ export default defineComponent({
   },
   setup(props, ctx) {
     console.log('module props: ', props);
-    const currentUser = ref(props.currentUser);
 
     const programDoc = computed({
       get: () => props.value,
@@ -304,11 +303,11 @@ export default defineComponent({
       return obj.name === 'demo';
     });
     if (index === -1) {
-      const initRfp = {
+      const initDemo = {
         name: 'demo',
         videoMaxLength: 3
       };
-      programDoc.value.data.adks.push(initRfp);
+      programDoc.value.data.adks.push(initDemo);
     }
 
     // const teamDoc = getModMongoDoc(
@@ -381,7 +380,8 @@ export default defineComponent({
       getColor,
       ...toRefs(timelineData),
       timeline,
-      comment
+      comment,
+      programDoc
     };
   }
 });
