@@ -3,7 +3,7 @@
   <v-container class="module">
     <div class="module__navbar">
       <v-btn
-        v-if="currentPage == 'preview'"
+        v-if="currentPage === 'Preview'"
         dark
         class="module__navbar-button"
         small
@@ -13,26 +13,26 @@
         >00:00:00</v-btn
       >
       <v-btn
-        v-if="currentPage != 'preview'"
+        v-if="currentPage !== 'Preview'"
         class="module__navbar-button"
         outlined
         x-small
         depressed
-        @click="currentPage = 'preview'"
+        @click="currentPage = 'Preview'"
         >Preview</v-btn
       >
       <v-btn
-        v-if="currentPage == 'preview'"
+        v-if="currentPage === 'Preview'"
         class="module__navbar-button"
         dark
         x-small
         depressed
         color="red"
-        @click="currentPage = 'setup'"
+        @click="currentPage = 'Setup'"
         >Exit Preview</v-btn
       >
 
-      <v-menu v-if="currentPage != 'preview'" offset-y left>
+      <v-menu v-if="currentPage !== 'Preview'" offset-y left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" small icon class="module__navbar-button" v-on="on">
             <v-icon color="grey lighten-1">mdi-cog</v-icon></v-btn
@@ -75,15 +75,15 @@
       </div>
       <div class="module__body">
         <v-progress-linear
-          v-if="currentPage != 'preview'"
+          v-if="currentPage !== 'Preview'"
           color="#dedede"
           height="2"
           value="100"
           buffer-value="100"
           stream
         />
-        <div v-if="currentPage != 'preview'" class="module__pagination">
-          <div v-for="page in subpages" :key="page" :class="{ active: currentPage == page }">
+        <div v-if="currentPage !== 'Preview'" class="module__pagination">
+          <div v-for="page in subpages" :key="page" :class="{ active: currentPage === page }">
             <div class="module__pagination-button--active" />
             <v-btn
               :ripple="false"
@@ -108,7 +108,7 @@
     <!-- TIMELINE START -->
 
     <template>
-      <v-container v-if="currentPage == 'preview'" style="max-width: 675px">
+      <v-container v-if="currentPage === 'Preview'" style="max-width: 675px">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" small :color="selectedColor" dark depressed v-on="on"
