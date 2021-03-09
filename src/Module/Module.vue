@@ -13,7 +13,7 @@
         >00:00:00</v-btn
       > -->
       <v-btn
-        v-if="currentPage !== 'Preview'"
+        v-if="currentPage !== 'Preview' && userType === 'organizer'"
         class="module__navbar-button"
         outlined
         x-small
@@ -22,7 +22,7 @@
         >Preview</v-btn
       >
       <v-btn
-        v-if="currentPage === 'Preview'"
+        v-if="currentPage === 'Preview' && userType === 'organizer'"
         class="module__navbar-button"
         dark
         x-small
@@ -281,6 +281,13 @@ export default defineComponent({
       required: true,
       type: Object as PropType<MongoDoc>
     },
+    userType: {
+      required: true,
+      type: String
+      // participant: '',
+      // organizer: '',
+      // stakeholder: ''
+    },
     currentUser: {
       required: true,
       type: Object as PropType<Realm.User>
@@ -317,6 +324,12 @@ export default defineComponent({
       subpages: ['Setup', 'Presets'],
       currentPage: 'Setup'
     });
+    if (props.userType === 'organizer') {
+      page.currentPage = 'setup';
+    } else {
+      page.currentPage = 'preview';
+      page.subpages = [];
+    }
     const getComponent = computed(() => {
       return `module-${page.currentPage.toLowerCase()}`;
     });

@@ -6,7 +6,7 @@
     |
     <button type="submit" @click="logOut()">log out</button>
     <v-app>
-      <Module v-model="programDocStub" :current-user="currentUser" />
+      <Module v-model="programDocStub" :current-user="currentUser" :user-type="userTypeStub" />
     </v-app>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default defineComponent({
       },
       changeStream: {}
     });
-
+    const userTypeStub = 'participant';
     const app = new Realm.App({ id: 'programdev-aogmg' });
     const email = ref('');
     const password = ref('');
@@ -61,6 +61,7 @@ export default defineComponent({
 
     return {
       programDocStub,
+      userTypeStub,
       currentUser,
       email,
       password,
