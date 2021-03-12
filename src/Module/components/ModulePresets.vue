@@ -9,13 +9,31 @@
           <v-select
             v-model="programDoc.data.adks[index].videoMaxLength"
             outlined
+            x-large
+            rounded
             :items="maxMinutes"
             :error-messages="errors"
             label="Maximum minutes for delivered YouTube video"
           ></v-select>
         </validation-provider>
+        <div class="module-default__scope mt-12">
+          <v-btn
+            x-large
+            depressed
+            rounded
+            outlined
+            :disabled="invalid"
+            :loading="loading"
+            @click="process()"
+          >
+            Save
+          </v-btn>
+        </div>
+        <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
+          message
+        }}</v-alert>
         <!-- <div class="presets__nopresets">No tweaking necessary</div> -->
-        <v-divider class="presets__divider"></v-divider>
+        <!-- <v-divider class="presets__divider"></v-divider>
         <div class="presets__section-title">Instructions</div>
         <Instruct v-model="setupInstructions" />
         <v-divider class="presets__divider"></v-divider>
@@ -40,14 +58,14 @@
             label="Is this activity required for participants to complete?"
             outlined
           ></v-select>
-        </validation-provider>
+        </validation-provider> -->
 
         <!-- <v-select
           :items="lockOrder"
           label="Lock activity group and placement order?"
           outlined
         ></v-select> -->
-        <validation-provider v-slot="{ errors }" slim rules="required">
+        <!-- <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
             v-model="deliverableActivity"
             :error-messages="errors"
@@ -56,13 +74,13 @@
             label="Is this a deliverable?"
             outlined
           ></v-select>
-        </validation-provider>
+        </validation-provider> -->
         <!-- <v-select
           :items="accessibility"
           label="Make this activity accessible to participants anytime?"
           outlined
         ></v-select> -->
-        <validation-provider v-slot="{ errors }" slim rules="required">
+        <!-- <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
             v-model="endEarlyActivity"
             :error-messages="errors"
@@ -71,7 +89,7 @@
             label="Allow participants to end program early after completion of this activity?"
             outlined
           ></v-select>
-        </validation-provider>
+        </validation-provider> -->
         <!-- POST-ACTIVITY REFLECTION -->
         <!-- <v-text-field
           label="Post-Activity Reflection"
@@ -83,7 +101,7 @@
           <v-btn class="presets__reflection-buttons" small depressed outlined>Save</v-btn>
           <v-btn class="presets__reflection-buttons" small depressed outlined>Preview</v-btn>
         </div> -->
-        <v-divider class="presets__divider"></v-divider>
+        <!-- <v-divider class="presets__divider"></v-divider> -->
         <!-- If activity is required, show button below, make tooltip show up while disabled, right now tooltip doesn't show up -->
         <!-- <div>
           <v-tooltip bottom>
@@ -94,25 +112,9 @@
           </v-tooltip>
         </div> -->
         <!-- Delete break when the two delete buttons above and below have been integrated as one solution -->
-        <br />
+        <!-- <br /> -->
         <!-- If activity is optional, show button below -->
-        <div><v-btn color="red" disabled depressed>Delete Activity</v-btn></div>
-
-        <div class="module-default__scope mt-12">
-          <v-btn
-            x-large
-            depressed
-            outlined
-            :disabled="invalid"
-            :loading="loading"
-            @click="process()"
-          >
-            Save
-          </v-btn>
-        </div>
-        <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
-          message
-        }}</v-alert>
+        <!-- <div><v-btn color="red" disabled depressed>Delete Activity</v-btn></div> -->
       </div>
     </v-container>
   </ValidationObserver>
@@ -121,14 +123,14 @@
 <script lang="ts">
 import { reactive, ref, toRefs, PropType, computed } from '@vue/composition-api';
 import { createLoader } from 'pcv4lib/src';
-import Instruct from './ModuleInstruct.vue';
+// import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, maxMinutes } from './const';
 import { MongoDoc } from '../types';
 
 export default {
   name: 'ModulePresets',
   components: {
-    Instruct
+    // Instruct
   },
   props: {
     value: {
