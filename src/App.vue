@@ -42,7 +42,7 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const userTypeStub = 'participant';
+    const userTypeStub = 'organizer';
     const app = new Realm.App({ id: 'programdev-aogmg' });
     const email = ref('');
     const password = ref('');
