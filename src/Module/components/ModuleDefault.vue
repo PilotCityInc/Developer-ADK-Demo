@@ -44,8 +44,7 @@
         buffer-value="100"
         stream
       />
-      <div class="module-default__scope">
-        <div class="module-default__row">
+        <div class="module-default__row mt-12">
           <validation-provider
             v-slot="{ errors }"
             slim
@@ -145,7 +144,6 @@
         <!-- ENTER CONTENT HERE -->
         <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
         <!-- <div class="module-default__none">Design your activity here</div> -->
-      </div>
     </v-container>
   </ValidationObserver>
 </template>
@@ -274,8 +272,8 @@ export default {
     // width: 100%;
     // padding: none;
     // margin: none;
-    margin-top: 0;
-    padding: 0;
+    margin-top: 0px;
+    padding: 0px;
   }
   &__employer-title {
     font-size: 25px;
