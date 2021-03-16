@@ -1,6 +1,6 @@
 <template>
   <ValidationObserver v-slot="{ invalid }" slim>
-    <v-container class="module-default pa-2">
+    <v-container class="module-default pa-0">
       <div class="module-default__instructions">
         <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
           <v-expansion-panel>
@@ -249,10 +249,11 @@ export default {
 
   &__row {
     display: flex;
+    width: 100%;
   }
 
   &__collapse-divider {
-    margin: 15px 0 75px;
+    // margin: 15px 0 75px;
     padding-right: 0;
     padding-left: 0;
     width: 100%;
