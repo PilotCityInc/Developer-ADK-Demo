@@ -122,7 +122,7 @@
 
 <script lang="ts">
 import { reactive, ref, toRefs, PropType, computed } from '@vue/composition-api';
-import { createLoader } from 'pcv4lib/src';
+import { loading } from 'pcv4lib/src';
 // import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, maxMinutes } from './const';
 import { MongoDoc } from '../types';
@@ -171,7 +171,7 @@ export default {
       ...toRefs(defaultActivity),
       programDoc,
       index,
-      ...createLoader(programDoc.value.update, 'Saved', 'Something went wrong, try again later')
+      ...loading(programDoc.value.update, 'Saved', 'Something went wrong, try again later')
     };
   }
 };
