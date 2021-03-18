@@ -76,7 +76,7 @@
       </div>
       <div class="module__body">
         <v-progress-linear
-          v-if="currentPage !== 'Preview'"
+          v-if="currentPage != 'preview'"
           color="#dedede"
           height="2"
           value="100"
