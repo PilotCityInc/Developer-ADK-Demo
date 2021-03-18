@@ -13,7 +13,7 @@
         >00:00:00</v-btn
       > -->
       <v-btn
-        v-if="currentPage !== 'preview' && userType === 'organizer'"
+        v-if="currentPage != 'preview' && userType === 'organizer'"
         class="module__navbar-button font-weight-bold"
         outlined
         small
@@ -23,7 +23,7 @@
         >Preview</v-btn
       >
       <v-btn
-        v-if="currentPage === 'preview' && userType === 'organizer'"
+        v-if="currentPage == 'preview' && userType === 'organizer'"
         class="module__navbar-button font-weight-bold"
         dark
         small
@@ -83,7 +83,7 @@
           buffer-value="100"
           stream
         />
-        <div v-if="currentPage !== 'preview'" class="module__pagination">
+        <div v-if="currentPage != 'preview'" class="module__pagination">
           <div v-for="page in subpages" :key="page" :class="{ active: currentPage === page }">
             <div class="module__pagination-button--active" />
             <v-btn
