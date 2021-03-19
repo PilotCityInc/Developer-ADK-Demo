@@ -37,43 +37,38 @@
         </v-expansion-panels>
       </div>
     <v-progress-linear class="mt-3" color="#dedede" height="2" value="100" buffer-value="100" stream />
-        <div class="d-flex flex-row pa-0 mt-12">
-          <div cols="9">
-            <validation-provider
-              class="module-default__youtube-verify-button"
-              v-slot="{ errors }"
-              slim
-              :rules="{
-                regex: /^((?:https?:)?\/\/)((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
-                required: true
-              }"
-            >
-              <v-text-field
-                v-model="link"
-                rounded
-                :error-messages="errors.concat(apiErrors)"
-                outlined
-                :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"
-                placeholder="https://youtu.be/yourvideocode"
-                prepend-inner-icon="mdi-youtube"
-                @input="apiErrors = []"
-              ></v-text-field>
-            </validation-provider>
-          </div>
-          <div cols="3">
-            <v-btn
-              class="module-default__youtube-verify-button ml-3"
+        <v-container class="d-flex flex-row pa-0 mt-12">
+          <validation-provider
+            class="module-default__youtube-verify-button"
+            v-slot="{ errors }"
+            slim
+            :rules="{
+              regex: /^((?:https?:)?\/\/)((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+              required: true
+            }"
+          >
+            <v-text-field
+              v-model="link"
               rounded
-              x-large
+              :error-messages="errors.concat(apiErrors)"
               outlined
-              depressed
-              :loading="verifyLoading"
-              :disabled="invalid"
-              @click="verifyLink()"
-              >Verify Link</v-btn
-            >
-          </div>
-        </div>
+              :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"                placeholder="https://youtu.be/yourvideocode"
+              prepend-inner-icon="mdi-youtube"
+              @input="apiErrors = []"
+            ></v-text-field>
+          </validation-provider>
+          <v-btn
+            class="module-default__youtube-verify-button ml-3"
+            rounded
+            x-large
+            outlined
+            depressed
+            :loading="verifyLoading"
+            :disabled="invalid"
+            @click="verifyLink()"
+            >Verify Link</v-btn
+          >
+        </v-container>
         <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
           <v-chip class="mr-2" dark small label color="green">
             <v-icon small left>mdi-check-bold</v-icon>
