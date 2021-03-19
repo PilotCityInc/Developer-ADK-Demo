@@ -37,7 +37,7 @@
         </v-expansion-panels>
       </div>
     <v-progress-linear class="mt-3" color="#dedede" height="2" value="100" buffer-value="100" stream />
-        <v-container class="d-flex flex-row pa-0 mt-12">
+        <v-container class="d-flex flex-row pa-2 mt-12">
           <validation-provider
             class="module-default__youtube-verify-button"
             v-slot="{ errors }"
@@ -52,7 +52,8 @@
               rounded
               :error-messages="errors.concat(apiErrors)"
               outlined
-              :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"                placeholder="https://youtu.be/yourvideocode"
+              :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"
+              placeholder="https://youtu.be/yourvideocode"
               prepend-inner-icon="mdi-youtube"
               @input="apiErrors = []"
             ></v-text-field>
@@ -305,7 +306,7 @@ export default {
 
   &__youtube-verify-button {
     min-height: 56px;
-    width: 100%;
+    // width: 100%;
   }
 
   &__about {
