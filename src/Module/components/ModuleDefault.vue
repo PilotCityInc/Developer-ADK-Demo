@@ -206,6 +206,10 @@ export default {
       if (res.statusCode === 200) {
         submittedVideo.value = res.body!.submittedVideo;
         // submittedVideo.value.
+        programDoc.value.update(() => ({
+          isComplete: true,
+          adkIndex: index
+        }));
       } else if (res.error) {
         apiErrors.value.push(res.error);
       }

@@ -4,7 +4,7 @@ export interface MongoDoc {
     programDesc: string;
     programName: string;
   };
-  update: () => Promise<any>;
+  update: (shouldMarkAsComplete?:any) => Promise<any>;
   changeStream: any;
 }
 
