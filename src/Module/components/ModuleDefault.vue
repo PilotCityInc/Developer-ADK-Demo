@@ -37,7 +37,7 @@
         </v-expansion-panels>
       </div>
     <v-progress-linear class="mt-3" color="#dedede" height="2" value="100" buffer-value="100" stream />
-        <v-container class="d-flex flex-row pa-2 mt-12">
+        <v-container class="d-flex flex-row pa-5 mt-12">
           <validation-provider
             class="module-default__youtube-verify-button"
             v-slot="{ errors }"
