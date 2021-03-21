@@ -163,6 +163,13 @@ export default {
       required: true,
       type: Object as PropType<MongoDoc>
     },
+    userType: {
+      required: true,
+      type: String,
+      // participant: '',
+      // organizer: '',
+      // stakeholder: ''
+    },
     currentUser: {
       required: true,
       type: Object as PropType<Realm.User>
