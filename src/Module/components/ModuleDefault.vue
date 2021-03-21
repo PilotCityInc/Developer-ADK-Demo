@@ -60,14 +60,13 @@
             ></v-text-field>
           </validation-provider>
           <v-btn
-            :disabled="userType === 'stakeholder'" 
             class="module-default__youtube-verify-button ml-3"
             rounded
             x-large
             outlined
             depressed
             :loading="verifyLoading"
-            :disabled="invalid"
+            :disabled="invalid || userType === 'stakeholder'"
             @click="verifyLink()"
             >Verify Link</v-btn
           >
