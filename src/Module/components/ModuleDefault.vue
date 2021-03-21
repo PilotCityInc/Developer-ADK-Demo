@@ -48,6 +48,7 @@
             }"
           >
             <v-text-field
+              :readonly="userType === 'stakeholder'" 
               v-model="link"
               rounded
               :error-messages="errors.concat(apiErrors)"
@@ -59,6 +60,7 @@
             ></v-text-field>
           </validation-provider>
           <v-btn
+            :disabled="userType === 'stakeholder'" 
             class="module-default__youtube-verify-button ml-3"
             rounded
             x-large

@@ -101,7 +101,7 @@
         </div>
         <div class="module__page">
           <keep-alive>
-            <component :is="getComponent" v-model="programDoc" :current-user="currentUser" />
+            <component :user-type="userType" :is="getComponent" v-model="programDoc" :current-user="currentUser" />
           </keep-alive>
         </div>
       </div>
