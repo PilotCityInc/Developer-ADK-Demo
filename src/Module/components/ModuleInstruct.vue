@@ -112,7 +112,6 @@
   </ValidationObserver>
 </template>
 
-
 <script lang="ts">
 import { ref, computed, defineComponent, PropType } from '@vue/composition-api';
 

@@ -36,42 +36,49 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
-    <v-progress-linear class="mt-3" color="#dedede" height="2" value="100" buffer-value="100" stream />
-        <v-container class="d-flex flex-row pa-5 mt-12">
-          <validation-provider
-            class="module-default__youtube-verify-button"
-            v-slot="{ errors }"
-            slim
-            :rules="{
-              regex: /^((?:https?:)?\/\/)((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
-              required: true
-            }"
-          >
-            <v-text-field
-              :readonly="userType === 'stakeholder'" 
-              v-model="link"
-              rounded
-              :error-messages="errors.concat(apiErrors)"
-              outlined
-              :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"
-              placeholder="https://youtu.be/yourvideocode"
-              prepend-inner-icon="mdi-youtube"
-              @input="apiErrors = []"
-            ></v-text-field>
-          </validation-provider>
-          <v-btn
-            class="module-default__youtube-verify-button ml-3"
+      <v-progress-linear
+        class="mt-3"
+        color="#dedede"
+        height="2"
+        value="100"
+        buffer-value="100"
+        stream
+      />
+      <v-container class="d-flex flex-row pa-5 mt-12">
+        <validation-provider
+          v-slot="{ errors }"
+          class="module-default__youtube-verify-button"
+          slim
+          :rules="{
+            regex: /^((?:https?:)?\/\/)((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+            required: true
+          }"
+        >
+          <v-text-field
+            v-model="link"
+            :readonly="userType === 'stakeholder'"
             rounded
-            x-large
+            :error-messages="errors.concat(apiErrors)"
             outlined
-            depressed
-            :loading="verifyLoading"
-            :disabled="invalid || userType === 'stakeholder'"
-            @click="verifyLink()"
-            >Verify Link</v-btn
-          >
-        </v-container>
-        <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
+            :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"
+            placeholder="https://youtu.be/yourvideocode"
+            prepend-inner-icon="mdi-youtube"
+            @input="apiErrors = []"
+          ></v-text-field>
+        </validation-provider>
+        <v-btn
+          class="module-default__youtube-verify-button ml-3"
+          rounded
+          x-large
+          outlined
+          depressed
+          :loading="verifyLoading"
+          :disabled="invalid || userType === 'stakeholder'"
+          @click="verifyLink()"
+          >Verify Link</v-btn
+        >
+      </v-container>
+      <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
           <v-chip class="mr-2" dark small label color="green">
             <v-icon small left>mdi-check-bold</v-icon>
             Verified YouTube Video
@@ -98,61 +105,62 @@
             Make Video Public or Unlisted
           </v-chip>
         </v-chip-group> -->
-        <div
-          v-if="!submittedVideo"
-          class="d-flex headline font-weight-bold justify-center align-center module-default__youtube"
-        >
-          No video yet
+      <div
+        v-if="!submittedVideo"
+        class="d-flex headline font-weight-bold justify-center align-center module-default__youtube"
+      >
+        No video yet
+      </div>
+      <div v-else>
+        <div>
+          <v-btn
+            rounded
+            outlined
+            color="grey darken-1"
+            class="mb-4 mt-4"
+            depressed
+            x-small
+            label
+            :href="`https://youtu.be/${submittedVideo.id}`"
+          >
+            <!-- <v-icon left>mdi-check</v-icon> -->
+            {{ submittedVideo.snippet.title }}
+            <v-icon x-small right>mdi-open-in-new</v-icon>
+          </v-btn>
         </div>
-        <div v-else>
-          <div>
-            <v-btn
-              rounded
-              outlined
-              color="grey darken-1"
-              class="mb-4 mt-4"
-              depressed
-              x-small
-              label
-              :href="`https://youtu.be/${submittedVideo.id}`"
-            >
-              <!-- <v-icon left>mdi-check</v-icon> -->
-              {{ submittedVideo.snippet.title }}
-              <v-icon x-small right>mdi-open-in-new</v-icon>
-            </v-btn>
-          </div>
 
-          <iframe
-            class="module-default__youtube"
-            :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          />
-        </div>
-        <!-- <v-text-field
+        <iframe
+          class="module-default__youtube"
+          :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+      <!-- <v-text-field
         disabled
         placeholder="3:25"
         outlined
         append-icon="mdi-close-circle"
       ></v-text-field> -->
-        <!-- ENTER CONTENT HERE -->
-        <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
-        <!-- <div class="module-default__none">Design your activity here</div> -->
+      <!-- ENTER CONTENT HERE -->
+      <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
+      <!-- <div class="module-default__none">Design your activity here</div> -->
     </v-container>
   </ValidationObserver>
 </template>
 
 <script lang="ts">
-import { computed, ref, PropType } from '@vue/composition-api';
+import { computed, ref, PropType, defineComponent } from '@vue/composition-api';
 import * as Realm from 'realm-web';
 // eslint says it can't find these modules from @types/node
 // can be fixed by removing "./node_modules/@types" from typeRoots in tsconfig.json
 // but then you get errors for unit test related imports
 // anyway this doesn't matter since it will be server-side
+import { getModAdk } from 'pcv4lib/src';
 import Instruct from './ModuleInstruct.vue';
 import { MongoDoc, Video } from '../types';
 
-export default {
+export default defineComponent({
   name: 'ModuleDefault',
   components: {
     Instruct
@@ -164,7 +172,7 @@ export default {
     },
     userType: {
       required: true,
-      type: String,
+      type: String
       // participant: '',
       // organizer: '',
       // stakeholder: ''
@@ -177,12 +185,14 @@ export default {
   setup(props, ctx) {
     const programDoc = computed({
       get: () => props.value,
-      set: newVal => {
+      set: (newVal: any) => {
         ctx.emit('input', newVal);
       }
     });
-    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
-    console.log(programDoc.value.data.adks[index].videoMaxLength);
+
+    const { adkIndex: index } = getModAdk(props, ctx.emit, 'demo', {
+      videoMaxLength: 3
+    });
 
     const link = ref('');
     // TODO: when teamDoc works, add submitted link from there if it exists
@@ -235,7 +245,7 @@ export default {
       verifyLink
     };
   }
-};
+});
 </script>
 
 <style lang="scss">

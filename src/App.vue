@@ -6,7 +6,7 @@
     |
     <button type="submit" @click="logOut()">log out</button>
     <v-app>
-      <Module v-model="programDocStub" :current-user="currentUser" :user-type="userTypeStub" />
+      <Module v-model="teamDocStub" :current-user="currentUser" :user-type="userTypeStub" />
     </v-app>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default defineComponent({
   },
 
   setup() {
-    const programDocStub: Ref<MongoDoc> = ref({
+    const teamDocStub: Ref<MongoDoc | null> = ref({
       data: {
         adks: [],
         programDesc: 'Mocked Description',
@@ -42,7 +42,8 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const userTypeStub = 'organizer';
+    const userTypeStub = 'participant';
+    if (userTypeStub === 'organizer') teamDocStub.value = null;
     const app = new Realm.App({ id: 'programdev-aogmg' });
     const email = ref('');
     const password = ref('');
@@ -60,7 +61,7 @@ export default defineComponent({
     const currentUser = computed(() => app.currentUser);
 
     return {
-      programDocStub,
+      teamDocStub,
       userTypeStub,
       currentUser,
       email,

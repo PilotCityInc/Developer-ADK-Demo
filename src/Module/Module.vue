@@ -101,7 +101,20 @@
         </div>
         <div class="module__page">
           <keep-alive>
-            <component :user-type="userType" :is="getComponent" v-model="programDoc" :current-user="currentUser" />
+            <component
+              :is="getComponent"
+              v-if="value"
+              v-model="value"
+              :user-type="userType"
+              :current-user="currentUser"
+            />
+            <component
+              :is="getComponent"
+              v-else
+              :value="{ data: { adks: [] } }"
+              :user-type="userType"
+              :current-user="currentUser"
+            />
           </keep-alive>
         </div>
       </div>
@@ -278,7 +291,7 @@ export default defineComponent({
   props: {
     value: {
       required: true,
-      type: Object as PropType<MongoDoc>
+      type: Object as PropType<MongoDoc | null>
     },
     userType: {
       required: true,
@@ -293,23 +306,6 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    console.log('module props: ', props);
-
-    const programDoc = computed({
-      get: () => props.value,
-      set: newVal => {
-        ctx.emit('input', newVal);
-      }
-    });
-    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
-    if (index === -1) {
-      const initDemo = {
-        name: 'demo',
-        videoMaxLength: 3
-      };
-      programDoc.value.data.adks.push(initDemo);
-    }
-
     // const teamDoc = getModMongoDoc(
     //   props,
     //   ctx.emit,
@@ -386,8 +382,7 @@ export default defineComponent({
       getColor,
       ...toRefs(timelineData),
       timeline,
-      comment,
-      programDoc
+      comment
     };
   }
 });
