@@ -103,17 +103,10 @@
           <keep-alive>
             <component
               :is="getComponent"
-              v-if="value"
-              v-model="value"
+              :team-doc="teamDoc || { data: { adks: [] } }"
               :user-type="userType"
               :current-user="currentUser"
-            />
-            <component
-              :is="getComponent"
-              v-else
-              :value="{ data: { adks: [] } }"
-              :user-type="userType"
-              :current-user="currentUser"
+              @inputTeamDoc="$emit('inputTeamDoc', $event)"
             />
           </keep-alive>
         </div>
@@ -289,7 +282,7 @@ export default defineComponent({
     'module-preview': Module.Default
   },
   props: {
-    value: {
+    teamDoc: {
       required: true,
       type: Object as PropType<MongoDoc | null>
     },

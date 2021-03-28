@@ -166,7 +166,7 @@ export default defineComponent({
     Instruct
   },
   props: {
-    value: {
+    teamDoc: {
       required: true,
       type: Object as PropType<MongoDoc>
     },
@@ -184,15 +184,22 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const programDoc = computed({
-      get: () => props.value,
+      get: () => props.teamDoc,
       set: (newVal: any) => {
-        ctx.emit('input', newVal);
+        ctx.emit('inputTeamDoc', newVal);
       }
     });
 
-    const { adkIndex: index } = getModAdk(props, ctx.emit, 'demo', {
-      videoMaxLength: 3
-    });
+    const { adkIndex: index } = getModAdk(
+      props,
+      ctx.emit,
+      'demo',
+      {
+        videoMaxLength: 3
+      },
+      'teamDoc',
+      'inputTeamDoc'
+    );
 
     const link = ref('');
     // TODO: when teamDoc works, add submitted link from there if it exists
