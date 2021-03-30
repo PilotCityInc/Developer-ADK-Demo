@@ -49,7 +49,7 @@ export default defineComponent({
     });
     const userTypeStub = 'participant';
     if (userTypeStub === 'organizer') teamDoc.value = null;
-    const app = new Realm.App({ id: 'programdev-aogmg' });
+    const app = new Realm.App({ id: 'program-otolc' });
     const email = ref('');
     const password = ref('');
 
