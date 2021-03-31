@@ -307,7 +307,7 @@ export default defineComponent({
     //   'input.teamDoc'
     // );
 
-    const moduleName = ref('Demonstration');
+    const moduleName = ref('Demonstrate');
     const page = reactive({
       subpages: ['Setup', 'Presets'],
       currentPage: 'Setup'
