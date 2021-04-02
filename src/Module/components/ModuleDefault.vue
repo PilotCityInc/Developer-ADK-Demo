@@ -119,7 +119,7 @@
             color="grey darken-1"
             class="mb-4 mt-4"
             depressed
-            x-small
+            small
             label
             :href="`https://youtu.be/${submittedVideo.id}`"
           >
@@ -128,13 +128,14 @@
             <v-icon x-small right>mdi-open-in-new</v-icon>
           </v-btn>
         </div>
-
-        <iframe
-          class="module-default__youtube"
-          :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        />
+        <div class="module-default__youtube">
+          <iframe
+            class="module-default__youtube"
+            :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
       </div>
       <!-- <v-text-field
         disabled
