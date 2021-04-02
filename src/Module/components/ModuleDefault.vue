@@ -191,12 +191,13 @@ export default defineComponent({
       }
     });
 
-    const { adkIndex: index } = getModAdk(
+    const { adkIndex: index, adkData } = getModAdk(
       props,
       ctx.emit,
       'demo',
       {
-        videoMaxLength: 3
+        videoMaxLength: 3,
+        submittedVideo: ''
       },
       'teamDoc',
       'inputTeamDoc'
@@ -204,7 +205,7 @@ export default defineComponent({
 
     const link = ref('');
     // TODO: when teamDoc works, add submitted link from there if it exists
-    const submittedVideo = ref<Video | undefined>();
+    const submittedVideo = ref<Video | undefined>(adkData.value.submittedVideo);
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
@@ -231,8 +232,9 @@ export default defineComponent({
       });
       if (res.statusCode === 200) {
         submittedVideo.value = res.body!.submittedVideo;
+        adkData.value.submittedVideo = submittedVideo.value;
         // submittedVideo.value.
-        programDoc.value.update(() => ({
+        props.teamDoc.update(() => ({
           isComplete: true,
           adkIndex: index
         }));
