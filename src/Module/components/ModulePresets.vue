@@ -3,7 +3,7 @@
     <v-container class="module-outcomes">
       <div class="module-outcomes__container">
         <!-- <v-divider class="presets__divider"></v-divider> -->
-        <div class="presets__section-title">General</div>
+        <!-- <div class="presets__section-title">General</div> -->
         <!-- <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span> -->
         <validation-provider v-slot="{ errors }" slim rules="numeric">
           <v-select

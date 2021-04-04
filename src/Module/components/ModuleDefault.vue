@@ -115,8 +115,8 @@
         <div>
           <v-btn
             rounded
-            outlined
-            color="grey darken-1"
+            color="pink"
+            dark
             class="mb-4 mt-4"
             depressed
             small
@@ -128,8 +128,10 @@
             <v-icon x-small right>mdi-open-in-new</v-icon>
           </v-btn>
         </div>
-        <div class="module-default__youtube">
+        <div>
           <iframe
+            width="100%"
+            height="330"
             class="module-default__youtube"
             :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
