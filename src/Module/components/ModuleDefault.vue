@@ -202,7 +202,7 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    const link = ref('');
+    const link = ref(adkData.value.submittedVideo);
     // TODO: when teamDoc works, add submitted link from there if it exists
     const submittedVideo = ref<Video | undefined>(adkData.value.submittedVideo);
     const setupInstructions = ref({
