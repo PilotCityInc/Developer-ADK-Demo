@@ -111,33 +111,30 @@
       >
         No video yet
       </div>
-      <v-container class="pa-0" v-else>
-        <div>
-          <v-btn
-            rounded
-            color="pink"
-            dark
-            class="mb-4 mt-4"
-            depressed
-            small
-            label
-            :href="`https://youtu.be/${submittedVideo.id}`"
-          >
+      <v-btn
+        v-if="submittedVideo"
+        rounded
+        color="pink"
+        dark
+        class="mb-4 mt-4"
+        depressed
+        small
+        label
+        :href="`https://youtu.be/${submittedVideo.id}`"
+      >
             <!-- <v-icon left>mdi-check</v-icon> -->
-            {{ submittedVideo.snippet.title }}
-            <v-icon x-small right>mdi-open-in-new</v-icon>
-          </v-btn>
-        </div>
-        <div class="module-default__youtube">
-          <iframe
-            width="100%"
-            height="330"
-            :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          />
-        </div>
-      </v-container>
+        {{ submittedVideo.snippet.title }}
+        <v-icon x-small right>mdi-open-in-new</v-icon>
+      </v-btn>
+      <iframe
+        v-if="submittedVideo"
+        class="module-default__youtube" 
+        width="100%"
+        height="330"
+        :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      />
       <!-- <v-text-field
         disabled
         placeholder="3:25"
