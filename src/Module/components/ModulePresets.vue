@@ -7,7 +7,7 @@
         <!-- <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span> -->
         <validation-provider v-slot="{ errors }" slim rules="numeric">
           <v-select
-            v-model="programDoc.data.adks[index].videoMaxLength"
+            v-model="maxMinutes"
             outlined
             x-large
             rounded

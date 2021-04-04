@@ -111,7 +111,7 @@
       >
         No video yet
       </div>
-      <div v-else>
+      <v-container class="pa-0" v-else>
         <div>
           <v-btn
             rounded
@@ -128,17 +128,16 @@
             <v-icon x-small right>mdi-open-in-new</v-icon>
           </v-btn>
         </div>
-        <div>
+        <div class="module-default__youtube">
           <iframe
             width="100%"
             height="330"
-            class="module-default__youtube"
             :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           />
         </div>
-      </div>
+      </v-container>
       <!-- <v-text-field
         disabled
         placeholder="3:25"
