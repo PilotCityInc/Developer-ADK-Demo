@@ -122,13 +122,13 @@
         label
         :href="`https://youtu.be/${submittedVideo.id}`"
       >
-            <!-- <v-icon left>mdi-check</v-icon> -->
+        <!-- <v-icon left>mdi-check</v-icon> -->
         {{ submittedVideo.snippet.title }}
         <v-icon x-small right>mdi-open-in-new</v-icon>
       </v-btn>
       <iframe
         v-if="submittedVideo"
-        class="module-default__youtube" 
+        class="module-default__youtube"
         width="100%"
         height="330"
         :src="`https://www.youtube.com/embed/${submittedVideo.id}`"
@@ -201,7 +201,9 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    const link = ref(adkData.value.submittedVideo.id);
+    const link = ref(
+      adkData.value.submittedVideo.id ? `https://youtu.be/${adkData.value.submittedVideo.id}` : ''
+    );
     // TODO: when teamDoc works, add submitted link from there if it exists
     const submittedVideo = ref<Video | undefined>(adkData.value.submittedVideo);
     const setupInstructions = ref({
