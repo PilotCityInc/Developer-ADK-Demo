@@ -103,6 +103,7 @@
           <keep-alive>
             <component
               :is="getComponent"
+              v-model="programDoc"
               :team-doc="teamDoc || { data: { adks: [] } }"
               :user-type="userType"
               :current-user="currentUser"
@@ -266,6 +267,7 @@ body {
 </style>
 <script lang="ts">
 import { computed, reactive, ref, toRefs, defineComponent, PropType } from '@vue/composition-api';
+import { getModMongoDoc } from 'pcv4lib/src';
 import * as Realm from 'realm-web';
 // import { getModMongoDoc } from 'pcv4lib';
 import '../styles/module.scss';
@@ -282,6 +284,10 @@ export default defineComponent({
     'module-preview': Module.Default
   },
   props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
     teamDoc: {
       required: true,
       type: Object as PropType<MongoDoc | null>
@@ -299,13 +305,7 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    // const teamDoc = getModMongoDoc(
-    //   props,
-    //   ctx.emit,
-    //   { demoVideoId: '' },
-    //   'teamDoc',
-    //   'input.teamDoc'
-    // );
+    const { programDoc } = getModMongoDoc(props, ctx.emit);
 
     const moduleName = ref('Demonstrate');
     const page = reactive({
@@ -371,6 +371,7 @@ export default defineComponent({
       config,
       moduleName,
       menu,
+      programDoc,
       getComponent,
       getColor,
       ...toRefs(timelineData),

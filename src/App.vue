@@ -7,6 +7,7 @@
     <button type="submit" @click="logOut()">log out</button>
     <v-app>
       <Module
+        v-model="programDocStub"
         :team-doc="teamDoc"
         :current-user="currentUser"
         :user-type="userTypeStub"
@@ -30,6 +31,23 @@ export default defineComponent({
   },
 
   setup() {
+    const programDocStub: Ref<MongoDoc> = ref({
+      data: {
+        adks: [],
+        programDesc: 'Mocked Description',
+        programName: 'Mocked Name'
+      },
+      update: () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(true);
+            // reject(new Error('REJECTED'));
+          }, 3000);
+        });
+      },
+      changeStream: {}
+    });
     const teamDoc: Ref<MongoDoc | null> = ref({
       data: {
         adks: [],
@@ -65,6 +83,7 @@ export default defineComponent({
 
     const currentUser = computed(() => app.currentUser);
     return {
+      programDocStub,
       teamDoc,
       userTypeStub,
       currentUser,

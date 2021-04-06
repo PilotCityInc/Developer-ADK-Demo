@@ -7,7 +7,7 @@
         <!-- <span class="presets__question-title">Maximum minutes for video (Default: 3 minutes)</span> -->
         <validation-provider v-slot="{ errors }" slim rules="numeric">
           <v-select
-            v-model="programDoc.data.adks[index].videoMaxLength"
+            v-model="adkData.videoMaxLength"
             outlined
             x-large
             rounded
@@ -122,7 +122,7 @@
 
 <script lang="ts">
 import { reactive, ref, toRefs, PropType, computed } from '@vue/composition-api';
-import { loading } from 'pcv4lib/src';
+import { getModAdk, loading } from 'pcv4lib/src';
 // import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, maxMinutes } from './const';
 import { MongoDoc } from '../types';
@@ -139,13 +139,10 @@ export default {
     }
   },
   setup(props, ctx) {
-    const programDoc = computed({
-      get: () => props.value,
-      set: newVal => {
-        ctx.emit('input', newVal);
-      }
+    const { adkData } = getModAdk(props, ctx.emit, 'demo', {
+      videoMaxLength: 3,
+      submittedVideo: ''
     });
-    const index = programDoc.value.data.adks.findIndex(obj => obj.name === 'demo');
 
     const presets = reactive({
       maxMinutes,
@@ -169,9 +166,7 @@ export default {
       ...toRefs(presets),
       setupInstructions,
       ...toRefs(defaultActivity),
-      programDoc,
-      index,
-      ...loading(programDoc.value.update, 'Saved', 'Something went wrong, try again later')
+      adkData
     };
   }
 };
