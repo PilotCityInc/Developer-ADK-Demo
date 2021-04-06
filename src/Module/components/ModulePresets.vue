@@ -139,10 +139,7 @@ export default {
     }
   },
   setup(props, ctx) {
-    const { adkData } = getModAdk(props, ctx.emit, 'demo', {
-      videoMaxLength: 3,
-      submittedVideo: ''
-    });
+    const { adkData } = getModAdk(props, ctx.emit, 'demo');
 
     const presets = reactive({
       maxMinutes,
@@ -151,13 +148,6 @@ export default {
       deliverable,
       endEarly
     });
-    const defaultActivity = reactive({
-      minutes: 3,
-      groupActivity: 'Project',
-      requiredActivity: 'Yes',
-      deliverableActivity: 'Yes',
-      endEarlyActivity: 'Creator has not allowed participants to end early after this activity'
-    });
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
@@ -165,7 +155,6 @@ export default {
     return {
       ...toRefs(presets),
       setupInstructions,
-      ...toRefs(defaultActivity),
       adkData
     };
   }

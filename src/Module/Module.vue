@@ -104,7 +104,7 @@
             <component
               :is="getComponent"
               v-model="programDoc"
-              :team-doc="teamDoc || { data: { adks: [] } }"
+              :team-doc="teamDoc"
               :user-type="userType"
               :current-user="currentUser"
               @inputTeamDoc="$emit('inputTeamDoc', $event)"
@@ -267,7 +267,7 @@ body {
 </style>
 <script lang="ts">
 import { computed, reactive, ref, toRefs, defineComponent, PropType } from '@vue/composition-api';
-import { getModMongoDoc } from 'pcv4lib/src';
+import { getModAdk, getModMongoDoc } from 'pcv4lib/src';
 import * as Realm from 'realm-web';
 // import { getModMongoDoc } from 'pcv4lib';
 import '../styles/module.scss';
@@ -306,6 +306,13 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const { programDoc } = getModMongoDoc(props, ctx.emit);
+    getModAdk(props, ctx.emit, 'demo', {
+      videoMaxLength: 3,
+      groupActivity: 'Project',
+      requiredActivity: 'Yes',
+      deliverableActivity: 'Yes',
+      endEarlyActivity: 'Creator has not allowed participants to end early after this activity'
+    });
 
     const moduleName = ref('Demonstrate');
     const page = reactive({

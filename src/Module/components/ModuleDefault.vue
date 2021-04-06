@@ -60,7 +60,7 @@
             rounded
             :error-messages="errors.concat(apiErrors)"
             outlined
-            :label="`YouTube: Enter ${videoMaxLength}-Minute Project Video`"
+            :label="`YouTube: Enter ${adkData.videoMaxLength}-Minute Project Video`"
             placeholder="https://youtu.be/yourvideocode"
             prepend-inner-icon="mdi-youtube"
             @input="apiErrors = []"
@@ -165,6 +165,10 @@ export default defineComponent({
     Instruct
   },
   props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
     teamDoc: {
       required: true,
       type: Object as PropType<MongoDoc>
@@ -182,30 +186,16 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const programDoc = computed({
-      get: () => props.teamDoc,
-      set: (newVal: any) => {
-        ctx.emit('inputTeamDoc', newVal);
-      }
-    });
+    const { adkData } = getModAdk(props, ctx.emit, 'demo');
 
-    const { adkIndex: index, adkData } = getModAdk(
-      props,
-      ctx.emit,
-      'demo',
-      {
-        videoMaxLength: 3,
-        submittedVideo: ''
-      },
-      'teamDoc',
-      'inputTeamDoc'
-    );
+    console.log('adkData', adkData);
 
     const link = ref(
-      adkData.value.submittedVideo.id ? `https://youtu.be/${adkData.value.submittedVideo.id}` : ''
+      props.teamDoc.submittedVideo ? `https://youtu.be/${props.teamDoc.submittedVideo.id}` : ''
     );
     // TODO: when teamDoc works, add submitted link from there if it exists
-    const submittedVideo = ref<Video | undefined>(adkData.value.submittedVideo);
+    const submittedVideo = ref<Video | undefined>(props.teamDoc.submittedVideo);
+    console.log('teamDoc', props.teamDoc);
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
@@ -227,16 +217,14 @@ export default defineComponent({
         payload: {
           videoLink: link.value,
           // TODO: probably want to move this part to server side
-          videoMaxLength: programDoc.value.data.adks[index].videoMaxLength
+          videoMaxLength: adkData.value.videoMaxLength
         }
       });
       if (res.statusCode === 200) {
         submittedVideo.value = res.body!.submittedVideo;
-        adkData.value.submittedVideo = submittedVideo.value;
-        // submittedVideo.value.
         props.teamDoc.update(() => ({
           isComplete: true,
-          adkIndex: index
+          submittedVideo: submittedVideo.value
         }));
       } else if (res.error) {
         apiErrors.value.push(res.error);
@@ -248,7 +236,7 @@ export default defineComponent({
       setupInstructions,
       showInstructions,
       link,
-      videoMaxLength: ref(programDoc.value.data.adks[index].videoMaxLength),
+      adkData,
       submittedVideo,
       apiErrors,
       verifyLoading,
