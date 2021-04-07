@@ -188,7 +188,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { adkData } = getModAdk(props, ctx.emit, 'demo');
     const { adkData: adkTeamData, adkIndex } =
-      getModAdk(props, ctx.emit, 'tinker', { submittedVideo: null }, 'teamDoc', 'inputTeamDoc') ??
+      getModAdk(props, ctx.emit, 'demo', { submittedVideo: null }, 'teamDoc', 'inputTeamDoc') ??
       null;
     const link = ref(
       adkTeamData?.submittedVideo ? `https://youtu.be/${adkTeamData.submittedVideo.id}` : ''
