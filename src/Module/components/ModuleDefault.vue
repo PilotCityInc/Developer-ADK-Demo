@@ -191,7 +191,9 @@ export default defineComponent({
       getModAdk(props, ctx.emit, 'demo', { submittedVideo: null }, 'teamDoc', 'inputTeamDoc') ??
       null;
     const link = ref(
-      adkTeamData?.submittedVideo ? `https://youtu.be/${adkTeamData.submittedVideo.id}` : ''
+      adkTeamData.value.submittedVideo
+        ? `https://youtu.be/${adkTeamData.value.submittedVideo.id}`
+        : ''
     );
     // TODO: when teamDoc works, add submitted link from there if it exists
     const submittedVideo = ref<Video | null>(adkTeamData?.value.submittedVideo);

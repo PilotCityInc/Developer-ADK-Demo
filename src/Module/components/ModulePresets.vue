@@ -121,13 +121,13 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref, toRefs, PropType, computed } from '@vue/composition-api';
+import { reactive, ref, toRefs, PropType, defineComponent } from '@vue/composition-api';
 import { getModAdk, getModMongoDoc, loading } from 'pcv4lib/src';
 // import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, maxMinutes } from './const';
 import { MongoDoc } from '../types';
 
-export default {
+export default defineComponent({
   name: 'ModulePresets',
   components: {
     // Instruct
@@ -160,7 +160,7 @@ export default {
       adkData
     };
   }
-};
+});
 </script>
 
 <style lang="scss">
@@ -175,10 +175,6 @@ export default {
   &__reflection-buttons {
     margin-right: 10px;
     margin-top: 10px;
-  }
-
-  &__reflection {
-    // margin-left: auto;
   }
 
   &__divider {
