@@ -122,7 +122,7 @@
 
 <script lang="ts">
 import { reactive, ref, toRefs, PropType, computed } from '@vue/composition-api';
-import { getModAdk, loading } from 'pcv4lib/src';
+import { getModAdk, getModMongoDoc, loading } from 'pcv4lib/src';
 // import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, maxMinutes } from './const';
 import { MongoDoc } from '../types';
@@ -140,6 +140,7 @@ export default {
   },
   setup(props, ctx) {
     const { adkData } = getModAdk(props, ctx.emit, 'demo');
+    const programDoc = getModMongoDoc(props, ctx.emit);
 
     const presets = reactive({
       maxMinutes,
@@ -155,6 +156,7 @@ export default {
     return {
       ...toRefs(presets),
       setupInstructions,
+      ...loading(programDoc.value.update, 'Saved Successfully', 'Could not save at this time'),
       adkData
     };
   }
