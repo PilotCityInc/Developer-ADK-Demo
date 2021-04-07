@@ -188,14 +188,11 @@ export default defineComponent({
   setup(props, ctx) {
     const { adkData } = getModAdk(props, ctx.emit, 'demo');
 
-    console.log('adkData', adkData);
-
     const link = ref(
       props.teamDoc.submittedVideo ? `https://youtu.be/${props.teamDoc.submittedVideo.id}` : ''
     );
     // TODO: when teamDoc works, add submitted link from there if it exists
     const submittedVideo = ref<Video | undefined>(props.teamDoc.submittedVideo);
-    console.log('teamDoc', props.teamDoc);
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
