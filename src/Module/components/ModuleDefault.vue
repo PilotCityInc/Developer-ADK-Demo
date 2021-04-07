@@ -56,7 +56,7 @@
         >
           <v-text-field
             v-model="link"
-            :readonly="userType === 'stakeholder'"
+            :readonly="!adkTeamData && userType !== 'organizer'"
             rounded
             :error-messages="errors.concat(apiErrors)"
             outlined
@@ -73,7 +73,7 @@
           outlined
           depressed
           :loading="verifyLoading"
-          :disabled="invalid || userType === 'stakeholder'"
+          :disabled="invalid || (!adkTeamData && userType !== 'organizer')"
           @click="verifyLink()"
           >Verify Link</v-btn
         >
@@ -149,7 +149,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, PropType, defineComponent } from '@vue/composition-api';
+import { ref, PropType, defineComponent } from '@vue/composition-api';
 import * as Realm from 'realm-web';
 // eslint says it can't find these modules from @types/node
 // can be fixed by removing "./node_modules/@types" from typeRoots in tsconfig.json
@@ -187,12 +187,14 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const { adkData } = getModAdk(props, ctx.emit, 'demo');
-
+    const { adkData: adkTeamData, adkIndex } =
+      getModAdk(props, ctx.emit, 'tinker', { submittedVideo: null }, 'teamDoc', 'inputTeamDoc') ??
+      null;
     const link = ref(
-      props.teamDoc.submittedVideo ? `https://youtu.be/${props.teamDoc.submittedVideo.id}` : ''
+      adkTeamData?.submittedVideo ? `https://youtu.be/${adkTeamData.submittedVideo.id}` : ''
     );
     // TODO: when teamDoc works, add submitted link from there if it exists
-    const submittedVideo = ref<Video | undefined>(props.teamDoc.submittedVideo);
+    const submittedVideo = ref<Video | null>(adkTeamData?.value.submittedVideo);
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
@@ -203,6 +205,10 @@ export default defineComponent({
 
     const verifyLoading = ref(false);
     async function verifyLink() {
+      if (!adkTeamData?.value && props.userType !== 'organizer') {
+        apiErrors.value.push('not in team');
+        return;
+      }
       verifyLoading.value = true;
       const user: Realm.User = props.currentUser as Realm.User;
       const res: {
@@ -219,10 +225,13 @@ export default defineComponent({
       });
       if (res.statusCode === 200) {
         submittedVideo.value = res.body!.submittedVideo;
-        props.teamDoc.update(() => ({
-          isComplete: true,
-          submittedVideo: submittedVideo.value
-        }));
+        if (props.userType !== 'organizer') {
+          adkTeamData.value.submittedVideo = submittedVideo.value;
+          props.teamDoc?.update(() => ({
+            isComplete: true,
+            adkIndex
+          }));
+        }
       } else if (res.error) {
         apiErrors.value.push(res.error);
       }
@@ -234,6 +243,7 @@ export default defineComponent({
       showInstructions,
       link,
       adkData,
+      adkTeamData,
       submittedVideo,
       apiErrors,
       verifyLoading,
