@@ -307,7 +307,7 @@ export default defineComponent({
   setup(props, ctx) {
     const programDoc = getModMongoDoc(props, ctx.emit);
     getModAdk(props, ctx.emit, 'demo', {
-      videoMaxLength: 3,
+      videoMaxLength: 5,
       groupActivity: 'Project',
       requiredActivity: 'Yes',
       deliverableActivity: 'Yes',

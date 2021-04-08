@@ -15,7 +15,7 @@ const endEarly = [
   'Yes',
   'No'
 ];
-const maxMinutes = [2, 3, 5];
+const maxMinutes = [2, 3, 5, 7, 10];
 
 export {
   group,
