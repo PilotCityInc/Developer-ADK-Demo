@@ -3,7 +3,7 @@
   "license": "MIT",
   "main": "/dist/index.ts",
   "name": "developer-adk-demo",
-  "version": "1.0.46",
+  "version": "1.0.51",
   "description": "PilotCity Development Kit Template for creating your own Program Activities",
   "repository": {
     "type": "git",
@@ -26,7 +26,6 @@
     "@vue/composition-api": "^1.0.0-beta.15",
     "core-js": "^3.6.5",
     "pcv4lib": "^1.0.13",
-    "realm-web": "^1.2.0",
     "register-service-worker": "^1.7.1",
     "roboto-fontface": "*",
     "vee-validate": "^3.4.1"
