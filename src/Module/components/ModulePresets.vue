@@ -16,7 +16,7 @@
             label="Maximum minutes for delivered YouTube video"
           ></v-select>
         </validation-provider>
-        <div class="module-default__scope mt-12">
+        <div class="module-default__scope mt-8">
           <v-btn
             x-large
             depressed

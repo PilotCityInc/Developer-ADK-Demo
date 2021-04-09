@@ -314,7 +314,7 @@ export default defineComponent({
       endEarlyActivity: 'Creator has not allowed participants to end early after this activity'
     });
 
-    const moduleName = ref('Demonstrate');
+    const moduleName = ref('Demo');
     const page = reactive({
       subpages: ['Setup', 'Presets'],
       currentPage: 'setup'
