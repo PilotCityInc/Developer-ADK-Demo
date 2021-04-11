@@ -54,9 +54,10 @@
             required: true
           }"
         >
+                    <!-- :readonly="!adkTeamData && userType !== 'organizer'" -->
           <v-text-field
             v-model="link"
-            :readonly="!adkTeamData && userType !== 'organizer'"
+            :disabled="userType === 'organizer' || userType === 'stakeholder'"
             rounded
             :error-messages="errors.concat(apiErrors)"
             outlined
