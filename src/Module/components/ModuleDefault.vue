@@ -60,22 +60,22 @@
             rounded
             :error-messages="errors.concat(apiErrors)"
             outlined
-            :label="`YouTube: Enter ${adkData.videoMaxLength}-Minute Project Video`"
+            :label="`Enter ${adkData.videoMaxLength}-Minute YouTube Video`"
             placeholder="https://youtu.be/yourvideocode"
             prepend-inner-icon="mdi-youtube"
             @input="apiErrors = []"
           ></v-text-field>
         </validation-provider>
         <v-btn
-          class="module-default__youtube-verify-button ml-3"
+          class="module-default__youtube-verify-button ml-3 white--text"
           rounded
           x-large
-          outlined
+          color="#eda1bf"
           depressed
           :loading="verifyLoading"
           :disabled="invalid || (!adkTeamData && userType !== 'organizer')"
           @click="verifyLink()"
-          >Verify Link</v-btn
+          ><v-icon left>mdi-youtube</v-icon>Verify Link</v-btn
         >
       </v-container>
       <!-- <v-chip-group column multiple class="module-default__youtube-data mb-8">
