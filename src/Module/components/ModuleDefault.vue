@@ -55,14 +55,14 @@
           }"
         >
             <!-- :disabled="userType === 'organizer' || userType === 'stakeholder'" -->
-          <v-text-field
+          <!-- <v-text-field
             v-if="userType === 'organizer'"
             :label="`Enter ${adkData.videoMaxLength}-Minute YouTube Video`"
             rounded
             outlined
             placeholder="https://youtu.be/yourvideocode"
             prepend-inner-icon="mdi-youtube"
-          ></v-text-field>
+          ></v-text-field> -->
           <v-text-field
             v-model="link"
             :readonly="!adkTeamData && userType !== 'organizer'"
