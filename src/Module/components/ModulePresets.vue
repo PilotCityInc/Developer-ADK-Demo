@@ -29,9 +29,13 @@
             Save
           </v-btn>
         </div>
-        <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
-          message
-        }}</v-alert>
+        <v-alert
+          v-if="success || error"
+          dense
+          class="mt-3 white--text presets__alert"
+          :color="success ? 'green' : 'red'"
+          >{{ message }}</v-alert
+        >
         <!-- <div class="presets__nopresets">No tweaking necessary</div> -->
         <!-- <v-divider class="presets__divider"></v-divider>
         <div class="presets__section-title">Instructions</div>
@@ -156,7 +160,7 @@ export default defineComponent({
     return {
       ...toRefs(presets),
       setupInstructions,
-      ...loading(programDoc.value.update, 'Saved Successfully', 'Could not save at this time'),
+      ...loading(programDoc.value.update, 'Success', 'Try again later'),
       adkData
     };
   }
